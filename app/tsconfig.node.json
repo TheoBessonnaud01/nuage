@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "types": [
+      "node"
+    ],
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "outDir": "node_modules/.tmp"
+  },
+  "include": [
+    "vite.config.ts"
+  ]
+}
