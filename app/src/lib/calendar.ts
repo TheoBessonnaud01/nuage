@@ -32,7 +32,7 @@ export function dayStatus(day: string, today: string, data: CalendarData): DaySt
   for (const a of data.attacks) {
     const { start, painEnd } = attackSpan(a, today);
     if (day >= start && day <= painEnd) {
-      const levels = data.attackLogs.filter((l) => l.attackId === a.id && l.date === day).map((l) => l.intensity);
+      const levels = data.attackLogs.filter((l) => l.attackId === a.id && l.date === day && l.intensity !== undefined).map((l) => l.intensity as number);
       return { kind: 'crise', intensity: levels.length ? Math.max(...levels) : null };
     }
   }

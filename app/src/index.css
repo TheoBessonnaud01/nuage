@@ -50,11 +50,17 @@
 }
 
 html, body, #root { min-height: 100%; }
+
+/* Hauteur réellement visible (iOS : sans la barre d'adresse ni l'encoche). */
+.screen-h { min-height: calc(100dvh - env(safe-area-inset-top)); }
+/* Espace en bas des pages sans barre d'action. */
+main { padding-bottom: calc(1.5rem + env(safe-area-inset-bottom)) !important; }
 body {
   @apply bg-bg text-ink font-sans antialiased;
   font-size: 17px;
   -webkit-tap-highlight-color: transparent;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  /* Encoche et barre du bas iPhone : le haut ici, le bas sur les barres d'action collées en bas. */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
 }
 
 @media (prefers-reduced-motion: reduce) {

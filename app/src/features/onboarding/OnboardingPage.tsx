@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { config } from '../../config';
 import { copy, withName } from '../../content/copy';
-import { Button, Card } from '../../components/ui';
+import { ActionBar, Button, Card } from '../../components/ui';
 import { updateSettings } from '../../db/db';
 import { canPromptInstall, detectPlatform, isStandalone, onInstallAvailable, promptInstall } from '../../lib/install';
 import { Mascot } from '../../mascot/Mascot';
@@ -53,14 +53,14 @@ export function OnboardingPage() {
   ][step];
 
   return (
-    <main className="mx-auto max-w-md px-4 py-6 min-h-screen flex flex-col">
+    <main className="mx-auto max-w-md px-4 pt-6 !pb-0 screen-h flex flex-col">
       <p className="text-sm text-muted font-bold" aria-live="polite">{t.step.replace('{n}', String(step + 1))}</p>
       <div className="flex items-start gap-2 mt-4">
         <Mascot mood={moodsByStep[step]} size="md" />
         <SpeechBubble key={step} className="mt-4 flex-1 text-lg">{bubble}</SpeechBubble>
       </div>
 
-      <Card className="mt-6 space-y-4 text-[17px]">
+      <Card className="mt-6 mb-6 space-y-4 text-[17px]">
         {step === 0 && (
           <p>{t.s1Body.replace('{mascotte}', config.mascotName).replace('{app}', config.appName)}</p>
         )}
@@ -83,14 +83,14 @@ export function OnboardingPage() {
         )}
       </Card>
 
-      <div className="mt-auto pt-6 space-y-2">
+      <ActionBar className="space-y-2">
         {step < 3
           ? <Button onClick={() => setStep(step + 1)}>{t.next}</Button>
           : <Button onClick={finish}>{t.start}</Button>}
         {step > 0 && (
           <Button variant="ghost" onClick={() => setStep(step - 1)}>{copy.common.back}</Button>
         )}
-      </div>
+      </ActionBar>
     </main>
   );
 }

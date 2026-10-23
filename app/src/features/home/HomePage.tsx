@@ -6,6 +6,10 @@ import { db } from '../../db/db';
 import { localDay, localHour } from '../../lib/dates';
 import { useSettings } from '../../lib/useSettings';
 import { useGoals } from '../../lib/useGoals';
+import { useActiveAttack } from '../../lib/useAttack';
+import { attackDayNumber } from '../../lib/attacks';
+import { MedFollowUp } from '../crisis/MedFollowUp';
+import { PostdromeSlider } from '../crisis/PostdromeSlider';
 import { getMood, homeLineContext } from '../../mascot/moodEngine';
 import { Pepite } from '../../mascot/Pepite';
 import { useMoodContext } from '../../mascot/useMoodContext';
@@ -28,6 +32,9 @@ export function HomePage() {
   const settings = useSettings();
   const mascotHidden = settings?.mascotMode === 'masqué';
   const goalsInfo = useGoals();
+  const active = useActiveAttack();
+  const inCrisis = active?.attack.status === 'en cours';
+  const inPost = active?.attack.status === 'post-crise';
   const g = goalsInfo?.goals;
   const todayDone = useLiveQuery(async () => !!(await db.days.get(localDay())), [], false);
 
@@ -47,12 +54,40 @@ export function HomePage() {
         />
       )}
 
-      <Link to="/checkin" className="block">
-        <Card tone="bg-sauge/30">
-          <h2 className="text-xl font-extrabold">{copy.home.dailyCardTitle}</h2>
-          <p className="text-muted mt-1">{todayDone ? copy.home.dailyCardDone : copy.home.dailyCardTodo}</p>
-        </Card>
-      </Link>
+      {inCrisis && active && (
+        <>
+          <Link to="/crise" className="block">
+            <Card tone="bg-lavande/40">
+              <h2 className="text-xl font-extrabold">{copy.home.crisisCardTitle.replace('{n}', String(attackDayNumber(active.attack)))}</h2>
+              <p className="text-muted mt-1">{copy.home.crisisCardBody}</p>
+            </Card>
+          </Link>
+          <MedFollowUp />
+          <Link to="/crise/fin" className="block"><Button variant="secondary" tabIndex={-1}>{copy.crisis.painGone}</Button></Link>
+          <Link to="/crise/traitement" className="block"><Button variant="ghost" tabIndex={-1}>{copy.crisis.tookMed}</Button></Link>
+        </>
+      )}
+
+      {inPost && active && (
+        <>
+          <Card tone="bg-ciel/50">
+            <h2 className="text-xl font-extrabold mb-1">
+              <Link to="/crise">{copy.home.postCardTitle}</Link>
+            </h2>
+            <PostdromeSlider attackId={active.attack.id} showTitle={false} />
+          </Card>
+          <MedFollowUp />
+        </>
+      )}
+
+      {!inCrisis && (
+        <Link to="/checkin" className="block">
+          <Card tone="bg-sauge/30">
+            <h2 className="text-xl font-extrabold">{copy.home.dailyCardTitle}</h2>
+            <p className="text-muted mt-1">{todayDone ? copy.home.dailyCardDone : copy.home.dailyCardTodo}</p>
+          </Card>
+        </Link>
+      )}
 
       {goalsInfo?.pendingCelebration && (
         <Link to="/palier" className="block">
@@ -60,9 +95,11 @@ export function HomePage() {
         </Link>
       )}
 
-      <Link to="/crise" className="block">
-        <Button variant="secondary" tabIndex={-1}>{copy.home.migraineButton}</Button>
-      </Link>
+      {!active && (
+        <Link to="/crise/debut" className="block">
+          <Button variant="secondary" tabIndex={-1}>{copy.home.migraineButton}</Button>
+        </Link>
+      )}
 
       {g && (
         <Link to="/objectifs" className="flex items-center justify-between rounded-2xl bg-surface border border-line px-4 min-h-touch py-3">

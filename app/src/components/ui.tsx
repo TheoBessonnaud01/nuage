@@ -35,3 +35,15 @@ export function PageHeader({ title, backTo = '/' }: { title: string; backTo?: st
     </header>
   );
 }
+
+/** Barre de boutons toujours visible en bas de l'écran (même si la page est longue). */
+export function ActionBar({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return (
+    <div
+      className={`sticky bottom-0 -mx-4 mt-auto px-4 pt-3 bg-bg/95 backdrop-blur border-t border-line/60 ${className}`}
+      style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
+    >
+      {children}
+    </div>
+  );
+}

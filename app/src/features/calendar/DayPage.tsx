@@ -4,7 +4,7 @@ import { copy } from '../../content/copy';
 import { labelOf, sensoryExposure, warningSigns } from '../../content/factors';
 import { checkinScreens } from '../../content/questions';
 import type { DayEntry } from '../../db/types';
-import { dayStatus } from '../../lib/calendar';
+import { attackSpan, dayStatus } from '../../lib/calendar';
 import { formatDayLong, localDay } from '../../lib/dates';
 import { useCalendarData } from '../../lib/useCalendarData';
 
@@ -21,7 +21,7 @@ function choiceLabel(field: keyof DayEntry, value: unknown): string {
   return String(value);
 }
 
-function rows(e: DayEntry): [string, string][] {
+export function rows(e: DayEntry): [string, string][] {
   const out: [string, string][] = [];
   const s = t.sections;
   const add = (label: string, v: string | undefined | false) => { if (v) out.push([label, v]); };
@@ -61,6 +61,10 @@ export function DayPage() {
 
   const entry = data.entries.get(date);
   const status = dayStatus(date, today, data);
+  const attack = data.attacks.find((a) => {
+    const { start, recovered } = attackSpan(a, today);
+    return date >= start && date <= recovered;
+  });
 
   return (
     <main className="mx-auto max-w-md px-4 py-6 space-y-4">
@@ -69,6 +73,11 @@ export function DayPage() {
       {(status.kind === 'crise' || status.kind === 'post-crise') && (
         <Card tone={status.kind === 'crise' ? 'bg-lavande/50' : 'bg-ciel/60'}>
           <p className="font-extrabold">{status.kind === 'crise' ? t.crisis : t.postCrisis}</p>
+          {attack && (
+            <Link to={attack.status === 'terminée' ? `/crise/recap/${attack.id}` : '/crise'} className="block mt-2 font-bold underline">
+              {copy.crisis.recapLink}
+            </Link>
+          )}
         </Card>
       )}
 

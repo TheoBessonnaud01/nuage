@@ -82,3 +82,65 @@ export const postdromeSymptoms: ListItem[] = [
 export function labelOf(list: ListItem[], id: string): string {
   return list.find((i) => i.id === id)?.label ?? id;
 }
+
+/** Localisation de la douleur (vue de face : la gauche de Noémie est à droite de l'écran). */
+export const painLocations: ListItem[] = [
+  { id: 'front', label: 'Front' },
+  { id: 'tempe-gauche', label: 'Tempe gauche' },
+  { id: 'tempe-droite', label: 'Tempe droite' },
+  { id: 'yeux', label: 'Derrière les yeux' },
+  { id: 'gauche', label: 'Côté gauche' },
+  { id: 'droite', label: 'Côté droit' },
+  { id: 'arriere', label: 'Arrière de la tête' },
+  { id: 'nuque', label: 'Nuque' },
+  { id: 'toute', label: 'Toute la tête' },
+];
+
+export const painTypes: ListItem[] = [
+  { id: 'pulsatile', label: 'Ça pulse, ça bat', emoji: '💓', tip: 'Douleur pulsatile : elle bat comme le cœur.' },
+  { id: 'etau', label: 'En étau, ça serre', emoji: '🗜️' },
+  { id: 'lancinante', label: 'Lancinante, ça élance', emoji: '⚡' },
+  { id: 'brulure', label: 'Comme une brûlure', emoji: '🔥' },
+];
+
+export const worsenedBy: ListItem[] = [
+  { id: 'mouvement', label: 'Bouger', emoji: '🚶‍♀️' },
+  { id: 'lumiere', label: 'La lumière', emoji: '💡' },
+  { id: 'ecrans', label: 'Les écrans', emoji: '📱' },
+  { id: 'bruit', label: 'Le bruit', emoji: '🔊' },
+  { id: 'odeurs', label: 'Les odeurs', emoji: '👃' },
+  { id: 'chaleur', label: 'La chaleur', emoji: '🥵' },
+  { id: 'effort', label: 'L’effort', emoji: '🏃‍♀️' },
+];
+
+export const relievedBy: ListItem[] = [
+  { id: 'obscurite', label: 'L’obscurité', emoji: '🌑' },
+  { id: 'sommeil', label: 'Dormir', emoji: '😴' },
+  { id: 'froid', label: 'Le froid', emoji: '🧊' },
+  { id: 'chaud', label: 'Le chaud', emoji: '♨️' },
+  { id: 'calme', label: 'Le calme', emoji: '🤫' },
+  { id: 'manger', label: 'Manger', emoji: '🍞' },
+  { id: 'boire', label: 'Boire', emoji: '💧' },
+  { id: 'massage', label: 'Un massage', emoji: '💆‍♀️' },
+];
+
+export const functionalLevels: { value: 'normale' | 'ralentie' | 'au lit'; label: string; emoji: string }[] = [
+  { value: 'normale', label: 'Activité normale', emoji: '🚶‍♀️' },
+  { value: 'ralentie', label: 'Au ralenti', emoji: '🐢' },
+  { value: 'au lit', label: 'Au lit', emoji: '🛏️' },
+];
+
+export const medicationCategories: { value: 'antalgique simple' | 'anti-inflammatoire' | 'triptan' | 'association' | 'autre'; label: string; help: string }[] = [
+  { value: 'antalgique simple', label: 'Antalgique simple', help: 'ex. paracétamol, aspirine' },
+  { value: 'anti-inflammatoire', label: 'Anti-inflammatoire', help: 'ex. ibuprofène, kétoprofène' },
+  { value: 'triptan', label: 'Triptan', help: 'les médicaments en « -triptan »' },
+  { value: 'association', label: 'Association', help: 'plusieurs molécules dans un même comprimé' },
+  { value: 'autre', label: 'Autre', help: '' },
+];
+
+export const efficacyLevels: { value: 'aucune' | 'un peu' | 'bien' | 'totalement'; label: string; emoji: string }[] = [
+  { value: 'aucune', label: 'Pas du tout', emoji: '🌧️' },
+  { value: 'un peu', label: 'Un peu', emoji: '🌥️' },
+  { value: 'bien', label: 'Bien', emoji: '🌤️' },
+  { value: 'totalement', label: 'Totalement', emoji: '☀️' },
+];

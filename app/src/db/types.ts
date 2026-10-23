@@ -32,7 +32,13 @@ export interface DayEntry {
   headacheToday?: 'non' | 'léger mal de tête' | 'migraine';
 }
 
-export type InvestigationAnswers = Record<string, unknown>;
+export interface InvestigationAnswers {
+  /** Jours explorés (veille, avant-veille) : les réponses vont dans leurs check-ins (DayEntry). */
+  days?: string[];
+  /** « Autre chose qui te semble suspect ? » */
+  suspect?: string;
+  doneAt?: string;
+}
 
 export interface Attack {
   id: string;
@@ -50,13 +56,13 @@ export interface AttackDayLog {
   attackId: string;
   date: string;
   time: string;
-  intensity: number; // 0..10
+  intensity?: number; // 0..10 (facultatif : tout peut être passé)
   locations: string[];
   painType: string[];
   symptoms: string[];
   worsenedBy: string[];
   relievedBy: string[];
-  functional: 'normale' | 'ralentie' | 'au lit';
+  functional?: 'normale' | 'ralentie' | 'au lit';
   note?: string;
 }
 
@@ -96,6 +102,11 @@ export interface CustomLists {
   medications: string[];
 }
 
+export interface MedicationDef {
+  name: string;
+  category: Medication['category'];
+}
+
 export interface Settings {
   firstName: string;
   reminderTime: string;
@@ -111,6 +122,7 @@ export interface Settings {
   onboardingDone: boolean;
   lastBackupAt?: string;
   lastOpenedAt?: string;
+  medicationCatalog?: MedicationDef[]; // traitements de Noémie (nom + catégorie), vide par défaut
   maxTier?: number;          // meilleur palier d'objectif atteint (on ne redescend jamais)
   celebratedTier?: number;   // dernier palier fêté
 }

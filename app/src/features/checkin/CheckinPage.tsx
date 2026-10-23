@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
-import { Button, Card } from '../../components/ui';
+import { ActionBar, Button, Card } from '../../components/ui';
 import { Chip, EmojiScale, HoursPicker, ProgressBar } from '../../components/inputs';
 import { copy, withName } from '../../content/copy';
 import { checkinScreens, type Part, type Screen } from '../../content/questions';
@@ -22,7 +22,10 @@ const DEFAULT_SLEEP = 7;
 export function CheckinPage() {
   const { date: param } = useParams();
   const today = localDay();
-  const [chosen, setChosen] = useState<string | null>(() => param ?? (isLateNight() ? null : today));
+  // Sans date dans l'adresse : aujourd'hui, ou la veille si Noémie le choisit (entre minuit et 4h).
+  const [picked, setPicked] = useState<string | null>(() => (isLateNight() ? null : today));
+  const chosen = param ?? picked;
+  const setChosen = setPicked;
 
   if (param && (param > today || !/^\d{4}-\d{2}-\d{2}$/.test(param))) return <Navigate to="/" replace />;
 
@@ -108,7 +111,7 @@ function CheckinFlow({ date }: { date: string }) {
   const title = existed ? t.titleEdit : isLate ? t.titleLate : t.titleToday;
 
   return (
-    <main className="mx-auto max-w-md px-4 py-4 min-h-screen flex flex-col">
+    <main className="mx-auto max-w-md px-4 pt-4 !pb-0 screen-h flex flex-col">
       <header className="flex items-center gap-2">
         <button type="button" onClick={back} aria-label={copy.common.back} className="min-h-touch min-w-touch grid place-items-center rounded-full text-2xl">‹</button>
         <div className="flex-1">
@@ -121,8 +124,8 @@ function CheckinFlow({ date }: { date: string }) {
         <Pepite key={index} mood="pense" size="sm" text={bubbleText} lineContext={bubbleText ? undefined : bubbleContext} tappable={false} />
       </div>
 
-      <section className="mt-2 flex-1 space-y-5" aria-live="polite">
-        <h1 className="text-2xl font-extrabold">{screen.title}</h1>
+      <section className="mt-2 pb-6 space-y-5" aria-live="polite">
+        <h1 className="text-2xl font-extrabold">{isLate ? screen.title.replace('aujourd’hui', 'ce jour-là') : screen.title}</h1>
         <InfoBox screen={screen} />
         {screen.parts.map((part) => (
           <PartInput
@@ -138,14 +141,14 @@ function CheckinFlow({ date }: { date: string }) {
         ))}
       </section>
 
-      <div className="pt-6 grid grid-cols-2 gap-3">
+      <ActionBar className="grid grid-cols-2 gap-3">
         <Button variant="ghost" onClick={next}>{copy.common.skip}</Button>
         <Button onClick={async () => {
           // « Suivant » valide la durée affichée par défaut ; « Passer » ne garde rien.
           if (screen.parts.some((p) => p.kind === 'hours') && entry.sleepHours === undefined) await save({ sleepHours: DEFAULT_SLEEP });
           next();
         }}>{index === screens.length - 1 ? t.finish : copy.common.next}</Button>
-      </div>
+      </ActionBar>
     </main>
   );
 }
@@ -163,7 +166,7 @@ function InfoBox({ screen }: { screen: Screen }) {
   );
 }
 
-function PartInput({
+export function PartInput({
   part, entry, settings, onChange,
 }: {
   part: Part;
