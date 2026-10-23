@@ -1,14 +1,13 @@
 import { Link } from 'react-router-dom';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { copy, withName } from '../../content/copy';
 import { Button, Card } from '../../components/ui';
-import { localHour } from '../../lib/dates';
+import { db } from '../../db/db';
+import { localDay, localHour } from '../../lib/dates';
 import { useSettings } from '../../lib/useSettings';
-
-function greeting(hour: number) {
-  if (hour < 12) return copy.home.greetingMorning;
-  if (hour < 18) return copy.home.greetingAfternoon;
-  return copy.home.greetingEvening;
-}
+import { getMood, homeLineContext } from '../../mascot/moodEngine';
+import { Pepite } from '../../mascot/Pepite';
+import { useMoodContext } from '../../mascot/useMoodContext';
 
 const navItems = [
   { to: '/calendrier', label: copy.home.nav.calendar, icon: '🗓️' },
@@ -17,19 +16,38 @@ const navItems = [
   { to: '/reglages', label: copy.home.nav.settings, icon: '⚙️' },
 ];
 
+function greeting(hour: number) {
+  if (hour < 12) return copy.home.greetingMorning;
+  if (hour < 18) return copy.home.greetingAfternoon;
+  return copy.home.greetingEvening;
+}
+
 export function HomePage() {
+  const ctx = useMoodContext();
   const settings = useSettings();
-  const name = settings?.firstName ?? '';
+  const mascotHidden = settings?.mascotMode === 'masqué';
+  const todayDone = useLiveQuery(async () => !!(await db.days.get(localDay())), [], false);
 
   return (
     <main className="mx-auto max-w-md px-4 py-6 space-y-5">
-      {/* Pépite viendra ici à l'étape 1 bis */}
-      <h1 className="text-3xl font-extrabold">{withName(greeting(localHour()), name)}</h1>
+      {mascotHidden
+        ? <h1 className="text-3xl font-extrabold">{withName(greeting(localHour()), settings?.firstName ?? '')}</h1>
+        : <h1 className="sr-only">{copy.home.title}</h1>}
+      {ctx && !mascotHidden && (
+        <Pepite
+          mood={getMood(ctx)}
+          lineContext={homeLineContext(ctx)}
+          size="md"
+          importantBubble
+          animated={ctx.attackStatus !== 'en cours'}
+          tappable={ctx.attackStatus !== 'en cours'}
+        />
+      )}
 
       <Link to="/checkin" className="block">
         <Card tone="bg-sauge/30">
           <h2 className="text-xl font-extrabold">{copy.home.dailyCardTitle}</h2>
-          <p className="text-muted mt-1">{copy.home.dailyCardTodo}</p>
+          <p className="text-muted mt-1">{todayDone ? copy.home.dailyCardDone : copy.home.dailyCardTodo}</p>
         </Card>
       </Link>
 

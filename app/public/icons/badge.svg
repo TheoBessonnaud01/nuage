@@ -1,3 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
-  <g fill="#FFFFFF"><circle cx="36" cy="54" r="16"/><circle cx="54" cy="46" r="20"/><circle cx="66" cy="58" r="12"/><rect x="24" y="56" width="54" height="14" rx="7"/></g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="32 8 136 136">
+  <mask id="m"><rect x="0" y="0" width="200" height="200" fill="white"/>
+    <ellipse cx="78" cy="80" rx="9" ry="11" fill="black"/><ellipse cx="122" cy="80" rx="9" ry="11" fill="black"/>
+    <path d="M93 96 Q100 92 107 96 Q104 103 100 104 Q96 103 93 96Z" fill="black"/></mask>
+  <g fill="white" mask="url(#m)">
+    <path d="M52 62 C 44 38, 52 22, 66 24 C 76 26, 86 36, 90 44 Z"/>
+    <path d="M148 62 C 156 38, 148 22, 134 24 C 124 26, 114 36, 110 44 Z"/>
+    <ellipse cx="100" cy="84" rx="62" ry="52"/></g></svg>

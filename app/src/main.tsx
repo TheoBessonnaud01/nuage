@@ -5,12 +5,18 @@ import '@fontsource-variable/nunito';
 import './index.css';
 import { App } from './App';
 import { getSettings, requestPersistence, updateSettings } from './db/db';
+import { captureInstallPrompt } from './lib/install';
+import { session } from './lib/session';
 
 registerSW({ immediate: true });
+captureInstallPrompt();
 
 // Premier lancement : réglages par défaut + demande de stockage persistant.
 getSettings()
-  .then(() => updateSettings({ lastOpenedAt: new Date().toISOString() }))
+  .then((s) => {
+    session.previousOpenedAt = s.lastOpenedAt ?? null;
+    return updateSettings({ lastOpenedAt: new Date().toISOString() });
+  })
   .catch(() => undefined);
 requestPersistence().catch(() => undefined);
 
