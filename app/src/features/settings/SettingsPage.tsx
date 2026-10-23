@@ -5,6 +5,7 @@ import { Card, PageHeader } from '../../components/ui';
 import { updateSettings } from '../../db/db';
 import type { Settings } from '../../db/types';
 import { useSettings } from '../../lib/useSettings';
+import { WeatherSettings } from './WeatherSettings';
 
 export function SettingsPage() {
   const settings = useSettings();
@@ -37,6 +38,8 @@ export function SettingsPage() {
         />
         <p className="text-muted text-[15px] mt-3">{copy.settings.mascotHelp}</p>
       </Card>
+
+      <WeatherSettings settings={settings} />
 
       <Card>
         <h2 className="font-extrabold">{copy.settings.storage}</h2>

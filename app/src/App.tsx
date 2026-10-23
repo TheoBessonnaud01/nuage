@@ -2,6 +2,11 @@ import { useEffect, useRef } from 'react';
 import { HashRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { ComingSoon } from './components/ComingSoon';
 import { copy } from './content/copy';
+import { CalendarPage } from './features/calendar/CalendarPage';
+import { DayPage } from './features/calendar/DayPage';
+import { CheckinPage } from './features/checkin/CheckinPage';
+import { CelebrationPage } from './features/goals/CelebrationPage';
+import { GoalsPage } from './features/goals/GoalsPage';
 import { HomePage } from './features/home/HomePage';
 import { OnboardingPage } from './features/onboarding/OnboardingPage';
 import { MascotPreview } from './mascot/MascotPreview';
@@ -28,9 +33,13 @@ export function App() {
       <Routes>
         <Route path="/bienvenue" element={<OnboardingPage />} />
         <Route path="/" element={<HomePage />} />
-        <Route path="/checkin" element={<ComingSoon title={copy.home.dailyCardTitle} />} />
+        <Route path="/checkin" element={<CheckinPage />} />
+        <Route path="/checkin/:date" element={<CheckinPage />} />
+        <Route path="/jour/:date" element={<DayPage />} />
+        <Route path="/objectifs" element={<GoalsPage />} />
+        <Route path="/palier" element={<CelebrationPage />} />
         <Route path="/crise" element={<ComingSoon title="Ma crise" />} />
-        <Route path="/calendrier" element={<ComingSoon title={copy.home.nav.calendar} />} />
+        <Route path="/calendrier" element={<CalendarPage />} />
         <Route path="/mois" element={<ComingSoon title={copy.home.nav.months} />} />
         <Route path="/comprendre" element={<ComingSoon title={copy.home.nav.info} />} />
         <Route path="/reglages" element={<SettingsPage />} />

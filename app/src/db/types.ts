@@ -111,4 +111,6 @@ export interface Settings {
   onboardingDone: boolean;
   lastBackupAt?: string;
   lastOpenedAt?: string;
+  maxTier?: number;          // meilleur palier d'objectif atteint (on ne redescend jamais)
+  celebratedTier?: number;   // dernier palier fêté
 }

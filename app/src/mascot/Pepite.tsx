@@ -10,6 +10,8 @@ interface PepiteProps {
   mood: Mood;
   /** Contexte de la bulle ; sans contexte, pas de bulle. */
   lineContext?: LineContext;
+  /** Texte imposé (prioritaire sur lineContext). */
+  text?: string;
   size?: 'sm' | 'md' | 'lg';
   /** En mode discret, la bulle ne s'affiche que si `importantBubble` (accueil, célébrations). */
   importantBubble?: boolean;
@@ -21,7 +23,7 @@ const smaller: Record<'sm' | 'md' | 'lg', 'xs' | 'sm' | 'md'> = { sm: 'xs', md: 
 
 /** Pépite + sa bulle, en respectant le réglage normal / discret / masqué. */
 export function Pepite({
-  mood, lineContext, size = 'md', importantBubble = false, animated = true, tappable = true,
+  mood, lineContext, text, size = 'md', importantBubble = false, animated = true, tappable = true,
 }: PepiteProps) {
   const settings = useSettings();
   const mode: Settings['mascotMode'] = settings?.mascotMode ?? 'normal';
@@ -30,8 +32,10 @@ export function Pepite({
   const [bubbleKey, setBubbleKey] = useState(0);
 
   useEffect(() => {
-    if (lineContext && firstName) setLine(pickLine(lineContext, firstName));
-  }, [lineContext, firstName]);
+    if (text) setLine(text);
+    else if (lineContext && firstName) setLine(pickLine(lineContext, firstName));
+    else setLine(null);
+  }, [lineContext, text, firstName]);
 
   if (mode === 'masqué') return null;
   const discreet = mode === 'discret';
@@ -48,7 +52,7 @@ export function Pepite({
         <Mascot mood={mood} size={discreet ? smaller[size] : size} animated={animated} onTap={tappable ? onTap : undefined} />
       </div>
       {showBubble && (
-        <SpeechBubble key={bubbleKey} pointer="left" className="mt-4 flex-1">{line}</SpeechBubble>
+        <SpeechBubble key={`${bubbleKey}-${line}`} pointer="left" className="mt-4 flex-1">{line}</SpeechBubble>
       )}
     </div>
   );

@@ -5,6 +5,7 @@ import { Button, Card } from '../../components/ui';
 import { db } from '../../db/db';
 import { localDay, localHour } from '../../lib/dates';
 import { useSettings } from '../../lib/useSettings';
+import { useGoals } from '../../lib/useGoals';
 import { getMood, homeLineContext } from '../../mascot/moodEngine';
 import { Pepite } from '../../mascot/Pepite';
 import { useMoodContext } from '../../mascot/useMoodContext';
@@ -26,6 +27,8 @@ export function HomePage() {
   const ctx = useMoodContext();
   const settings = useSettings();
   const mascotHidden = settings?.mascotMode === 'masqué';
+  const goalsInfo = useGoals();
+  const g = goalsInfo?.goals;
   const todayDone = useLiveQuery(async () => !!(await db.days.get(localDay())), [], false);
 
   return (
@@ -51,9 +54,29 @@ export function HomePage() {
         </Card>
       </Link>
 
+      {goalsInfo?.pendingCelebration && (
+        <Link to="/palier" className="block">
+          <Card tone="bg-peche/50"><p className="font-extrabold">{copy.goals.banner}</p></Card>
+        </Link>
+      )}
+
       <Link to="/crise" className="block">
         <Button variant="secondary" tabIndex={-1}>{copy.home.migraineButton}</Button>
       </Link>
+
+      {g && (
+        <Link to="/objectifs" className="flex items-center justify-between rounded-2xl bg-surface border border-line px-4 min-h-touch py-3">
+          <span className="font-bold">
+            {g.thisWeekTarget === null
+              ? `${g.tier.emoji} ${g.tier.label}`
+              : copy.checkin.weekProgress
+                .replace('{n}', String(g.thisWeekCount))
+                .replace('{target}', String(g.thisWeekTarget))
+                .replace('{emoji}', g.tier.emoji)}
+          </span>
+          <span className="text-muted text-sm">{copy.goals.title} ›</span>
+        </Link>
+      )}
 
       <nav className="grid grid-cols-2 gap-3 pt-2" aria-label="Menu">
         {navItems.map((n) => (

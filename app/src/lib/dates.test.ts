@@ -13,3 +13,25 @@ describe('dates Europe/Paris', () => {
     expect(isLateNight(new Date('2026-01-10T12:00:00Z'))).toBe(false);
   });
 });
+
+import { addDays, addMonths, daysOfMonth, diffDays, formatDayLong, weekStart } from './dates';
+
+describe('calculs sur les jours', () => {
+  it('ajoute des jours en traversant les mois et l’heure d’été', () => {
+    expect(addDays('2026-03-28', 2)).toBe('2026-03-30');
+    expect(addDays('2026-10-31', 1)).toBe('2026-11-01');
+    expect(diffDays('2026-03-28', '2026-04-02')).toBe(5);
+  });
+  it('trouve le lundi de la semaine', () => {
+    expect(weekStart('2026-10-22')).toBe('2026-10-19'); // jeudi → lundi
+    expect(weekStart('2026-10-25')).toBe('2026-10-19'); // dimanche → lundi
+    expect(weekStart('2026-10-19')).toBe('2026-10-19');
+  });
+  it('liste les jours du mois', () => {
+    expect(daysOfMonth('2026-02')).toHaveLength(28);
+    expect(addMonths('2026-12', 1)).toBe('2027-01');
+  });
+  it('formate en français', () => {
+    expect(formatDayLong('2026-10-20')).toBe('mardi 20 octobre');
+  });
+});
