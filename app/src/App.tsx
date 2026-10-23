@@ -3,6 +3,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 import { ComingSoon } from './components/ComingSoon';
 import { copy } from './content/copy';
 import { HomePage } from './features/home/HomePage';
+import { MascotPreview } from './mascot/MascotPreview';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { applyTheme } from './lib/theme';
 import { useCrisisActive, useSettings } from './lib/useSettings';
@@ -30,6 +31,7 @@ export function App() {
         <Route path="/mois" element={<ComingSoon title={copy.home.nav.months} />} />
         <Route path="/comprendre" element={<ComingSoon title={copy.home.nav.info} />} />
         <Route path="/reglages" element={<SettingsPage />} />
+        {import.meta.env.DEV && <Route path="/mascot-preview" element={<MascotPreview />} />}
         <Route path="*" element={<HomePage />} />
       </Routes>
     </HashRouter>

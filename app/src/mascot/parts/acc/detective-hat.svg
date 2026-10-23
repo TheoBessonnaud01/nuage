@@ -1,0 +1,3 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -10 200 215">
+<path d="M50 50 Q100 -6 150 50 Q100 40 50 50Z" fill="var(--pp-brun, #B98B5E)" stroke="var(--pp-line, #5A3A2A)" stroke-width="4" stroke-linejoin="round"/><path d="M78 24 L84 46 M100 12 L100 44 M122 24 L116 46" stroke="var(--pp-stripe, #7A4A2E)" stroke-width="2.5" opacity=".6"/><path d="M60 36 Q100 26 140 36" fill="none" stroke="var(--pp-stripe, #7A4A2E)" stroke-width="2.5" opacity=".6"/><path d="M44 52 Q100 38 156 52" fill="none" stroke="var(--pp-line, #5A3A2A)" stroke-width="5" stroke-linecap="round"/><circle cx="100" cy="12" r="4" fill="var(--pp-stripe, #7A4A2E)"/>
+</svg>
