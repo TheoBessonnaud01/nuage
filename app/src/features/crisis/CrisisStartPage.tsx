@@ -61,7 +61,7 @@ export function CrisisStartPage() {
       auraTypes: aura === 'oui' ? auraKinds : undefined,
       firstLog: { intensity, locations, painType, symptoms, worsenedBy: [], relievedBy: [] },
     });
-    navigate('/crise', { replace: true, state: { justStarted: true } });
+    navigate('/crise/bilan', { replace: true, state: { start: true } });
   };
 
   return (

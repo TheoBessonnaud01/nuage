@@ -5,6 +5,7 @@ import { copy } from './content/copy';
 import { CalendarPage } from './features/calendar/CalendarPage';
 import { DayPage } from './features/calendar/DayPage';
 import { CheckinPage } from './features/checkin/CheckinPage';
+import { CrisisDigestPage } from './features/crisis/CrisisDigestPage';
 import { CrisisHubPage } from './features/crisis/CrisisHubPage';
 import { CrisisLogPage } from './features/crisis/CrisisLogPage';
 import { CrisisStartPage } from './features/crisis/CrisisStartPage';
@@ -42,6 +43,7 @@ export function App() {
         <Route path="/crise" element={<CrisisHubPage />} />
         <Route path="/crise/debut" element={<CrisisStartPage />} />
         <Route path="/crise/suivi" element={<CrisisLogPage />} />
+        <Route path="/crise/bilan" element={<CrisisDigestPage />} />
         <Route path="/crise/traitement" element={<MedicationPage />} />
         <Route path="/crise/enquete" element={<InvestigationPage />} />
         <Route path="/crise/fin" element={<EndPainPage />} />

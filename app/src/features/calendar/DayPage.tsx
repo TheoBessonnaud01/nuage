@@ -88,7 +88,7 @@ export function DayPage() {
             {rows(entry).map(([k, v]) => (
               <div key={k}>
                 <dt className="text-sm font-bold text-muted">{k}</dt>
-                <dd className="text-[17px]">{v}</dd>
+                <dd className="text-[16px]">{v}</dd>
               </div>
             ))}
           </dl>

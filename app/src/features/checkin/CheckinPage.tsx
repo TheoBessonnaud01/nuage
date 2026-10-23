@@ -243,7 +243,7 @@ export function PartInput({
           onChange={(e) => onChange({ note: e.target.value.trim() ? e.target.value : undefined })}
           placeholder={part.placeholder}
           rows={5}
-          className="w-full rounded-2xl border-2 border-line bg-surface p-4 text-[17px] focus:border-sauge-fort outline-none"
+          className="w-full rounded-2xl border-2 border-line bg-surface p-4 text-[16px] focus:border-sauge-fort outline-none"
         />
       );
   }

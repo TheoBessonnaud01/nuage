@@ -54,3 +54,39 @@ describe('résumé de crise', () => {
     expect(medsAwaitingFollowUp(meds, now).map((m) => m.takenAt)).toEqual(['2026-10-08T09:00:00+02:00']);
   });
 });
+
+import { digestCrisis } from './attacks';
+
+describe('mot de la fin : analyse de la crise', () => {
+  const live: Attack = { id: 'live', startAt: '2026-10-23T10:00:00+02:00', hadAura: 'non', investigation: {}, status: 'en cours' };
+  const l = (time: string, intensity: number | undefined, extra: Partial<AttackDayLog> = {}): AttackDayLog => ({
+    id: time, attackId: 'live', date: '2026-10-23', time, intensity, locations: [], painType: [], symptoms: [], worsenedBy: [], relievedBy: [], ...extra,
+  });
+  const pastAttack = (id: string, start: string, end: string): Attack => ({ id, startAt: start, endAt: end, hadAura: 'non', investigation: {}, status: 'terminée' });
+
+  it('donne la tendance, la durée et le dernier traitement', () => {
+    const d = digestCrisis(live, [l('10:00', 8), l('11:00', undefined), l('12:00', 5, { worsenedBy: ['lumiere'], symptoms: ['nausees'] })],
+      [med('2026-10-23T10:30:00+02:00', { attackId: 'live', name: 'Ibu' })], [], new Date('2026-10-23T13:00:00+02:00'));
+    expect(d.hoursSoFar).toBe(3);
+    expect(d.trend).toBe('baisse');
+    expect([d.firstIntensity, d.previousIntensity, d.lastIntensity]).toEqual([8, 8, 5]);
+    expect(d.lastMed?.name).toBe('Ibu');
+    expect(d.worsenedNow).toEqual(['lumiere']);
+    expect(d.nausea).toBe(true);
+  });
+
+  it('compare aux crises passées seulement s’il y en a au moins 2', () => {
+    const p1 = pastAttack('p1', '2026-09-01T08:00:00Z', '2026-09-01T14:00:00Z');
+    const p2 = pastAttack('p2', '2026-09-10T08:00:00Z', '2026-09-11T02:00:00Z');
+    const pastLogs = (id: string, relief: string[]) => [{ ...l('09:00', 6), attackId: id, relievedBy: relief }];
+    const one = digestCrisis(live, [], [], [{ attack: p1, logs: pastLogs('p1', ['obscurite']) }]);
+    expect(one.avgPastPainHours).toBeNull();
+    const two = digestCrisis(live, [], [], [
+      { attack: p1, logs: pastLogs('p1', ['obscurite', 'sommeil']) },
+      { attack: p2, logs: pastLogs('p2', ['obscurite']) },
+    ]);
+    expect(two.avgPastPainHours).toBe(12);
+    expect(two.pastRelief[0]).toBe('obscurite');
+    expect(two.trend).toBeNull();
+  });
+});

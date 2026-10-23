@@ -60,7 +60,7 @@ export function OnboardingPage() {
         <SpeechBubble key={step} className="mt-4 flex-1 text-lg">{bubble}</SpeechBubble>
       </div>
 
-      <Card className="mt-6 mb-6 space-y-4 text-[17px]">
+      <Card className="mt-6 mb-6 space-y-4 text-[16px]">
         {step === 0 && (
           <p>{t.s1Body.replace('{mascotte}', config.mascotName).replace('{app}', config.appName)}</p>
         )}

@@ -33,7 +33,7 @@ export function CelebrationPage() {
       <Card tone="bg-peche/40">
         <p className="text-6xl" aria-hidden>{tier.emoji}</p>
         <h1 className="text-3xl font-extrabold mt-2">{t.celebrateTitle.replace('{palier}', tier.label)}</h1>
-        <p className="mt-3 text-[17px]">{t.celebrateBodies[tier.id]}</p>
+        <p className="mt-3 text-[16px]">{t.celebrateBodies[tier.id]}</p>
         <p className="mt-3 text-muted italic">« {line} »</p>
       </Card>
       <Button onClick={done}>{t.celebrateCta}</Button>

@@ -128,7 +128,7 @@ export function InvestigationPage() {
           <>
             <h1 className="text-2xl font-extrabold">{t.invSuspectTitle}</h1>
             <textarea value={suspect} onChange={(e) => setSuspect(e.target.value)} placeholder={t.invSuspectPlaceholder} rows={4}
-              className="w-full rounded-2xl border-2 border-line bg-surface p-4 text-[17px] outline-none focus:border-sauge-fort" />
+              className="w-full rounded-2xl border-2 border-line bg-surface p-4 text-[16px] outline-none focus:border-sauge-fort" />
           </>
         )}
       </section>

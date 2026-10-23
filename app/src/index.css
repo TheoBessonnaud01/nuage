@@ -49,6 +49,8 @@
   transition: none !important;
 }
 
+/* Échelle générale : 15 px = 1rem (tout ce qui est en rem rétrécit un peu). Texte courant gardé à 16 px. */
+html { font-size: 15px; }
 html, body, #root { min-height: 100%; }
 
 /* Hauteur réellement visible (iOS : sans la barre d'adresse ni l'encoche). */
@@ -57,7 +59,7 @@ html, body, #root { min-height: 100%; }
 main { padding-bottom: calc(1.5rem + env(safe-area-inset-bottom)) !important; }
 body {
   @apply bg-bg text-ink font-sans antialiased;
-  font-size: 17px;
+  font-size: 16px;
   -webkit-tap-highlight-color: transparent;
   /* Encoche et barre du bas iPhone : le haut ici, le bas sur les barres d'action collées en bas. */
   padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);

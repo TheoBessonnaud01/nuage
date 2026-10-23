@@ -25,7 +25,7 @@ function Layer({ slot, name }: { slot: string; name?: string }) {
   return <g className={`pp-${slot}`} dangerouslySetInnerHTML={{ __html: svg }} />;
 }
 
-const sizes = { xs: 48, sm: 72, md: 140, lg: 200 } as const;
+const sizes = { xs: 44, sm: 64, md: 116, lg: 170 } as const;
 
 export interface MascotProps {
   mood: Mood;

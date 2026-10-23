@@ -73,7 +73,7 @@ export function WhenPicker({ value, onChange }: { value: string; onChange: (iso:
           value={local(value)}
           max={local(now.toISOString())}
           onChange={(e) => { if (e.target.value) { setPicked(null); onChange(new Date(e.target.value).toISOString()); } }}
-          className="mt-1 w-full min-h-touch rounded-xl border-2 border-line bg-surface px-3 text-[17px]"
+          className="mt-1 w-full min-h-touch rounded-xl border-2 border-line bg-surface px-3 text-[16px]"
         />
       </label>
     </div>

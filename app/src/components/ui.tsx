@@ -25,11 +25,11 @@ export function Button({
   );
 }
 
-export function PageHeader({ title, backTo = '/' }: { title: string; backTo?: string }) {
+export function PageHeader({ title, backTo = '/', backLabel }: { title: string; backTo?: string; backLabel?: string }) {
   return (
-    <header className="flex items-center gap-2 mb-4">
-      <Link to={backTo} aria-label="Retour" className="min-h-touch min-w-touch grid place-items-center rounded-full text-2xl">
-        ‹
+    <header className="mb-3">
+      <Link to={backTo} aria-label={backLabel ?? 'Retour'} className="inline-flex items-center gap-1 min-h-touch min-w-touch pr-3 rounded-full font-bold text-muted">
+        <span className="text-2xl leading-none">‹</span>{backLabel}
       </Link>
       <h1 className="text-2xl font-extrabold">{title}</h1>
     </header>

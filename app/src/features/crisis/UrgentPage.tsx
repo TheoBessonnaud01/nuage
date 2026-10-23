@@ -7,7 +7,7 @@ const t = copy.urgent;
 /** Fiche « Quand consulter en urgence » : sobre, lisible, sans mascotte. */
 export function UrgentPage() {
   return (
-    <main className="mx-auto max-w-md px-4 py-6 space-y-5 text-[17px]">
+    <main className="mx-auto max-w-md px-4 py-6 space-y-5 text-[16px]">
       <PageHeader title={c.titre} backTo="/crise" />
       {c.corps.map((p) => <p key={p}>{p}</p>)}
 

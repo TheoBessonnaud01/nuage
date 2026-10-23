@@ -46,7 +46,7 @@ export function CrisisLogPage() {
       render: () => (
         <div className="space-y-4">
           <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder={t.notePlaceholder} rows={3}
-            className="w-full rounded-2xl border-2 border-line bg-surface p-4 text-[17px] outline-none focus:border-sauge-fort" />
+            className="w-full rounded-2xl border-2 border-line bg-surface p-4 text-[16px] outline-none focus:border-sauge-fort" />
           <Link to="/crise/traitement" className="block"><Button variant="secondary" tabIndex={-1}>{t.tookMed}</Button></Link>
         </div>
       ),
@@ -55,7 +55,7 @@ export function CrisisLogPage() {
 
   const finish = async () => {
     await addAttackLog(data.attack.id, { intensity, locations: [], painType: [], symptoms, worsenedBy: worse, relievedBy: better, functional, note: note.trim() || undefined });
-    navigate('/crise', { replace: true });
+    navigate('/crise/bilan', { replace: true });
   };
 
   return <Wizard label={t.logNow} steps={steps} onFinish={finish} finishLabel={t.save} />;

@@ -35,3 +35,13 @@ export const urgentCard: InfoCard & { call15: string[]; soon: string[]; soonDays
   sourceUrl: 'https://www.ameli.fr/assure/sante/themes/mal-tete/calmer-cas-faut-consulter',
   verifiedAt: 'octobre 2026',
 };
+
+/** Gestes de confort pendant une crise (non médicamenteux). */
+export const comfortTips = {
+  dark: { id: 'dark', emoji: '🌑', text: 'T’allonger dans une pièce calme et peu éclairée.' },
+  cold: { id: 'cold', emoji: '🧊', text: 'Poser un linge froid sur ton front.' },
+  water: { id: 'water', emoji: '💧', text: 'Boire de l’eau, par petites gorgées, surtout si tu as des nausées ou des vomissements.' },
+  sourceLabel: 'Ameli.fr — Que faire et quand consulter en cas de migraine ?',
+  sourceUrl: 'https://www.ameli.fr/assure/sante/themes/migraine/bons-reflexes-cas-faut-consulter',
+  verifiedAt: 'octobre 2026',
+};

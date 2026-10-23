@@ -35,7 +35,7 @@ export function PostdromePage() {
     {
       key: 'note', title: t.noteTitle,
       render: () => <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder={t.notePlaceholder} rows={3}
-        className="w-full rounded-2xl border-2 border-line bg-surface p-4 text-[17px] outline-none focus:border-sauge-fort" />,
+        className="w-full rounded-2xl border-2 border-line bg-surface p-4 text-[16px] outline-none focus:border-sauge-fort" />,
     },
   ];
 

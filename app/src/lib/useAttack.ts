@@ -33,3 +33,11 @@ export function useAttack(id: string | undefined): AttackData | null | undefined
 export function usePendingMeds(): Medication[] {
   return useLiveQuery(() => db.medications.filter((m) => !m.efficacyAfter2h).toArray(), [], []) ?? [];
 }
+
+/** Crises passées avec leurs notes (pour comparer). */
+export function usePastAttacks(): { attack: Attack; logs: AttackDayLog[] }[] | undefined {
+  return useLiveQuery(async () => {
+    const [attacks, logs] = await Promise.all([db.attacks.where('status').equals('terminée').toArray(), db.attackLogs.toArray()]);
+    return attacks.map((a) => ({ attack: a, logs: logs.filter((l) => l.attackId === a.id) }));
+  }, []);
+}

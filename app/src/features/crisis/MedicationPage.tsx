@@ -74,7 +74,7 @@ export function MedicationPage() {
             {catalog.length === 0 && <p className="text-muted">{t.medEmpty}</p>}
             <label className="block">
               <span className="font-bold">{t.medName}</span>
-              <input value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full min-h-touch rounded-xl border-2 border-line bg-surface px-3 text-[17px]" />
+              <input value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full min-h-touch rounded-xl border-2 border-line bg-surface px-3 text-[16px]" />
             </label>
             <div>
               <p className="font-bold mb-2">{t.medCategory}</p>

@@ -49,7 +49,7 @@ export function RecapPage() {
 
       <Card className="!p-4">
         <p className="text-sm font-bold text-muted">{t.recapAura}</p>
-        <p className="text-[17px] mt-1">{aura}</p>
+        <p className="text-[16px] mt-1">{aura}</p>
       </Card>
 
       <Card>
