@@ -8,6 +8,7 @@ import { medicationCategories } from '../../content/factors';
 import { addMedication, addToCatalog } from '../../db/attacks';
 import type { Medication, MedicationDef } from '../../db/types';
 import { scheduleLocalFollowUp } from '../../lib/localReminder';
+import { updatePush } from '../../lib/push';
 import { useActiveAttack } from '../../lib/useAttack';
 import { useSettings } from '../../lib/useSettings';
 import { UrgentLink } from './UrgentLink';
@@ -40,7 +41,11 @@ export function MedicationPage() {
     await addMedication({ attackId: active?.attack.id, takenAt, name: def.name, category: def.category });
     // Relance 2 h après la prise (si l'app reste ouverte ; le reste passe par l'app ou le Worker)
     const remaining = 2 * 3600000 - (Date.now() - new Date(takenAt).getTime());
-    if (remaining > 0) scheduleLocalFollowUp(remaining);
+    if (remaining > 0) {
+      // Avec les notifications activées, c'est le Worker qui relance (même app fermée) ; sinon, relance locale.
+      if (settings.pushSubscribed) await updatePush({ relance: { at: new Date(Date.now() + remaining).toISOString() } });
+      else scheduleLocalFollowUp(remaining);
+    }
     setSaved(remaining > 10 * 60000 ? t.medSaved : t.medSavedPast);
     setTimeout(() => navigate(-1), 1400);
   };

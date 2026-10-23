@@ -1,0 +1,24 @@
+# Worker de notifications de Nuage (Cloudflare, offre gratuite)
+name = "nuage-notifications"
+main = "src/index.ts"
+compatibility_date = "2024-10-01"
+
+# Toutes les 15 minutes : rappels, messages du matin pendant une crise, relances, récap, sauvegarde
+[triggers]
+crons = ["*/15 * * * *"]
+
+# Stockage des abonnements (aucune donnée de santé).
+# Remplace l'id par celui affiché par : npx wrangler kv namespace create SUBS
+[[kv_namespaces]]
+binding = "SUBS"
+id = "A_REMPLACER"
+
+[vars]
+ALLOWED_ORIGIN = "https://theobessonnaud01.github.io"
+FIRST_NAME = "Noémie"
+VAPID_PUBLIC_KEY = "BKEy0b3_t8cCY-dGIlSg29Tz_Y9xAHM1NFvZ9f8dLV83vyf7zwUr_7MCok_lVPKLWB9ps3ZPUv9w_tSipe_ZN8c"
+VAPID_SUBJECT = "https://theobessonnaud01.github.io/nuage/"
+
+# Secrets (jamais dans ce fichier) :
+#   npx wrangler secret put VAPID_PRIVATE_JWK < .vapid-private.json
+#   npx wrangler secret put SHARED_SECRET < .shared-secret

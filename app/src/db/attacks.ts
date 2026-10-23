@@ -3,6 +3,8 @@ import type { Attack, AttackDayLog, InvestigationAnswers, Medication, Medication
 import { localDay } from '../lib/dates';
 
 const id = () => crypto.randomUUID();
+/** Prévient le Worker que la crise commence ou se termine (adapte le message du matin). */
+const syncPushMode = () => { void import('../lib/push').then((m) => m.syncMode()).catch(() => undefined); };
 const hhmm = (d: Date) => d.toTimeString().slice(0, 5);
 
 /** La crise en cours ou en post-crise (au plus une à la fois). */
@@ -27,6 +29,7 @@ export async function startAttack(data: {
       await db.attackLogs.put({ ...data.firstLog, id: id(), attackId, date: localDay(at), time: hhmm(at) });
     }
   });
+  syncPushMode();
   return attackId;
 }
 
@@ -70,6 +73,7 @@ export async function resumePain(attackId: string) {
   const a = await db.attacks.get(attackId);
   if (!a) return;
   await db.attacks.put({ ...a, endAt: undefined, status: 'en cours' });
+  syncPushMode();
 }
 
 export async function addPostdromeLog(attackId: string, log: Omit<PostdromeLog, 'id' | 'attackId' | 'date'>, at = new Date()) {
@@ -80,4 +84,5 @@ export async function addPostdromeLog(attackId: string, log: Omit<PostdromeLog, 
 /** « Je suis revenue à 100 % » → crise terminée. */
 export async function recover(attackId: string, recoveredAt: string) {
   await db.attacks.update(attackId, { recoveredAt, status: 'terminée' });
+  syncPushMode();
 }

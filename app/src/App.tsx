@@ -21,6 +21,7 @@ import { HomePage } from './features/home/HomePage';
 import { OnboardingPage } from './features/onboarding/OnboardingPage';
 import { MascotPreview } from './mascot/MascotPreview';
 import { SettingsPage } from './features/settings/SettingsPage';
+import { FallbackRemindersPage } from './features/settings/FallbackRemindersPage';
 import { applyTheme } from './lib/theme';
 import { useCrisisActive, useSettings } from './lib/useSettings';
 import type { Settings } from './db/types';
@@ -54,6 +55,7 @@ export function App() {
         <Route path="/mois" element={<ComingSoon title={copy.home.nav.months} />} />
         <Route path="/comprendre" element={<ComingSoon title={copy.home.nav.info} />} />
         <Route path="/reglages" element={<SettingsPage />} />
+        <Route path="/rappels" element={<FallbackRemindersPage />} />
         {import.meta.env.DEV && <Route path="/mascot-preview" element={<MascotPreview />} />}
         <Route path="*" element={<HomePage />} />
       </Routes>

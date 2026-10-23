@@ -9,6 +9,7 @@ import { Mascot } from '../../mascot/Mascot';
 import type { Mood } from '../../mascot/moods';
 import { SpeechBubble } from '../../mascot/SpeechBubble';
 import { useSettings } from '../../lib/useSettings';
+import { enablePush, pushState, type PushState } from '../../lib/push';
 
 const t = copy.onboarding;
 const moodsByStep: Mood[] = ['coucou', 'pense', 'joyeux', 'fier'];
@@ -32,6 +33,21 @@ function InstallStep() {
       : <p>{t.s4AndroidManual}</p>;
   }
   return <p>{t.s4Other}</p>;
+}
+
+/** Activation des rappels : uniquement sur un geste, et sur iPhone seulement depuis l'écran d'accueil. */
+function RemindersStep({ time }: { time: string }) {
+  const [state, setState] = useState<PushState | null>(null);
+  useEffect(() => { pushState().then(setState); }, []);
+  if (!state || state === 'non-configure' || state === 'non-supporte' || state === 'refuse') return null;
+  if (state === 'ios-installer') return <p className="text-muted text-[15px]">{t.s4RemindersIosLater}</p>;
+  if (state === 'on') return <p className="font-bold">{t.s4RemindersOn}</p>;
+  return (
+    <div className="space-y-2">
+      <p className="text-[15px]">{t.s4Reminders.replace('{heure}', time.replace(':', 'h'))}</p>
+      <Button variant="secondary" onClick={async () => setState(await enablePush())}>{copy.settings.notifEnable}</Button>
+    </div>
+  );
 }
 
 export function OnboardingPage() {
@@ -78,7 +94,7 @@ export function OnboardingPage() {
         {step === 3 && (
           <>
             <InstallStep />
-            <p className="text-muted text-[15px]">{t.s4Reminders}</p>
+            <RemindersStep time={settings?.reminderTime ?? config.defaultReminderTime} />
           </>
         )}
       </Card>

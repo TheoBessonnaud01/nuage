@@ -6,6 +6,7 @@ import { updateSettings } from '../../db/db';
 import type { Settings } from '../../db/types';
 import { useSettings } from '../../lib/useSettings';
 import { WeatherSettings } from './WeatherSettings';
+import { NotificationSettings } from './NotificationSettings';
 
 export function SettingsPage() {
   const settings = useSettings();
@@ -22,6 +23,8 @@ export function SettingsPage() {
   return (
     <main className="mx-auto max-w-md px-4 py-6 space-y-4">
       <PageHeader title={copy.settings.title} />
+
+      <NotificationSettings settings={settings} />
 
       <Card>
         <h2 className="font-extrabold mb-3">{copy.settings.theme}</h2>

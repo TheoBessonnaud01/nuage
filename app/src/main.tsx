@@ -7,6 +7,7 @@ import { App } from './App';
 import { getSettings, requestPersistence, updateSettings } from './db/db';
 import { captureInstallPrompt } from './lib/install';
 import { session } from './lib/session';
+import { syncPush } from './lib/push';
 
 registerSW({ immediate: true });
 captureInstallPrompt();
@@ -19,6 +20,7 @@ getSettings()
   })
   .catch(() => undefined);
 requestPersistence().catch(() => undefined);
+syncPush().catch(() => undefined);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
