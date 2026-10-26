@@ -5,6 +5,7 @@ import { auraTypes, efficacyLevels, labelOf } from '../../content/factors';
 import { formatDuration, summarizeAttack } from '../../lib/attacks';
 import { useAttack } from '../../lib/useAttack';
 import { Pepite } from '../../mascot/Pepite';
+import { InfoSuggestion } from '../info/InfoSuggestion';
 
 const t = copy.crisis;
 const dateFmt = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
@@ -69,6 +70,7 @@ export function RecapPage() {
         )}
       </Card>
 
+      <InfoSuggestion trigger="premiere-crise-finie" when={finished} />
       <Link to="/" className="block"><Button tabIndex={-1}>{copy.checkin.backHome}</Button></Link>
     </main>
   );

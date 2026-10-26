@@ -6,6 +6,7 @@ import { copy } from '../../content/copy';
 import { endPain } from '../../db/attacks';
 import { useActiveAttack } from '../../lib/useAttack';
 import { Pepite } from '../../mascot/Pepite';
+import { InfoSuggestion } from '../info/InfoSuggestion';
 
 const t = copy.crisis;
 
@@ -24,6 +25,7 @@ export function EndPainPage() {
           <h1 className="text-2xl font-extrabold">{t.endDoneTitle}</h1>
           <p className="mt-2">{t.endDoneBody}</p>
         </Card>
+        <InfoSuggestion trigger="premiere-fin" />
         <Link to="/crise" className="block"><Button tabIndex={-1}>{t.postLog}</Button></Link>
         <Link to="/" className="block"><Button variant="ghost" tabIndex={-1}>{copy.checkin.backHome}</Button></Link>
       </main>

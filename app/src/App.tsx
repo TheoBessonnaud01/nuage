@@ -1,11 +1,9 @@
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { HashRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { ComingSoon } from './components/ComingSoon';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 // Chargé à part (graphique Recharts) pour que l'app démarre plus vite ; reste disponible hors ligne.
 const MonthsPage = lazy(() => import('./features/monthly/MonthsPage').then((m) => ({ default: m.MonthsPage })));
-import { copy } from './content/copy';
 import { CalendarPage } from './features/calendar/CalendarPage';
 import { DayPage } from './features/calendar/DayPage';
 import { CheckinPage } from './features/checkin/CheckinPage';
@@ -23,6 +21,8 @@ import { CelebrationPage } from './features/goals/CelebrationPage';
 import { GoalsPage } from './features/goals/GoalsPage';
 import { HomePage } from './features/home/HomePage';
 import { InsightsPage } from './features/insights/InsightsPage';
+import { InfoCardPage } from './features/info/InfoCardPage';
+import { InfoLibraryPage } from './features/info/InfoLibraryPage';
 import { MonthRecapPage } from './features/monthly/MonthRecapPage';
 
 import { OnboardingPage } from './features/onboarding/OnboardingPage';
@@ -63,7 +63,8 @@ export function App() {
         <Route path="/mois" element={<Suspense fallback={null}><MonthsPage /></Suspense>} />
         <Route path="/mois/:month" element={<MonthRecapPage />} />
         <Route path="/analyses" element={<InsightsPage />} />
-        <Route path="/comprendre" element={<ComingSoon title={copy.home.nav.info} />} />
+        <Route path="/comprendre" element={<InfoLibraryPage />} />
+        <Route path="/comprendre/:id" element={<InfoCardPage />} />
         <Route path="/reglages" element={<SettingsPage />} />
         <Route path="/rappels" element={<FallbackRemindersPage />} />
         {import.meta.env.DEV && <Route path="/mascot-preview" element={<MascotPreview />} />}

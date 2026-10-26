@@ -14,6 +14,7 @@ import { useSettings } from '../../lib/useSettings';
 import { fetchWeather } from '../../lib/weather';
 import { pickLine } from '../../mascot/lines';
 import { Pepite } from '../../mascot/Pepite';
+import { InfoSuggestion } from '../info/InfoSuggestion';
 
 const t = copy.checkin;
 const DEFAULT_SLEEP = 7;
@@ -270,6 +271,8 @@ function DoneScreen({ date, isLate, entry, firstName }: { date: string; isLate: 
       {info?.pendingCelebration && (
         <Link to="/palier" className="block"><Card tone="bg-peche/50"><p className="font-extrabold">{copy.goals.banner}</p></Card></Link>
       )}
+
+      <InfoSuggestion trigger="premier-signal" when={(entry.warningSigns?.length ?? 0) > 0} />
 
       {entry.headacheToday === 'migraine' && (
         <Card tone="bg-lavande/40">

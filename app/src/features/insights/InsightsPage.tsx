@@ -11,6 +11,7 @@ import {
 } from '../../lib/insights';
 import { useInsightsData } from '../../lib/useInsights';
 import { Pepite } from '../../mascot/Pepite';
+import { InfoSuggestion } from '../info/InfoSuggestion';
 
 const t = copy.insights;
 const pct = (x: number) => Math.round(x * 100);
@@ -83,9 +84,10 @@ export function InsightsPage() {
         <Card tone="bg-ciel/50">
           <h2 className="font-extrabold">{t.medAlertTitle}</h2>
           <p className="mt-1">{t.medAlertBody}</p>
-          <Link to="/comprendre" className="inline-block mt-2 font-bold underline">{t.medAlertLink}</Link>
+          <Link to="/comprendre/medicaments" className="inline-block mt-2 font-bold underline">{t.medAlertLink}</Link>
         </Card>
       )}
+      <InfoSuggestion trigger="reperes-traitement" when={medAlert.alert} />
 
       <section aria-labelledby="k">
         <h2 id="k" className="font-extrabold mb-2">{t.keyTitle}</h2>

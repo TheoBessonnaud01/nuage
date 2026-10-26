@@ -123,6 +123,8 @@ export interface Settings {
   lastBackupAt?: string;
   lastOpenedAt?: string;
   medicationCatalog?: MedicationDef[]; // traitements de Noémie (nom + catégorie), vide par défaut
+  infoShown?: string[];      // fiches déjà proposées au bon moment (jamais deux fois)
+  lastInfoOn?: string;       // jour de la dernière fiche proposée (max une par jour)
   maxTier?: number;          // meilleur palier d'objectif atteint (on ne redescend jamais)
   celebratedTier?: number;   // dernier palier fêté
 }

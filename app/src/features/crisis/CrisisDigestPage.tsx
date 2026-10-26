@@ -4,6 +4,7 @@ import { copy } from '../../content/copy';
 import { useActiveAttack } from '../../lib/useAttack';
 import { Pepite } from '../../mascot/Pepite';
 import { CrisisDigest } from './CrisisDigest';
+import { InfoSuggestion } from '../info/InfoSuggestion';
 
 const t = copy.crisis;
 
@@ -21,6 +22,7 @@ export function CrisisDigestPage() {
         <Pepite mood="calin" lineContext={state?.start ? 'debutCrise' : 'criseEnCours'} size="sm" animated={false} tappable={false} />
         <h1 className="text-xl font-extrabold">{state?.start ? t.digestStartTitle : t.digestTitle}</h1>
         <CrisisDigest data={data} />
+        <InfoSuggestion trigger="premiere-aura" when={!!state?.start && data.attack.hadAura === 'oui'} />
       </div>
       <ActionBar>
         <Button onClick={() => navigate('/crise', { replace: true })}>{t.digestOk}</Button>
