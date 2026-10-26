@@ -69,7 +69,7 @@ export function HomePage() {
           <Link to="/crise" className="block">
             <Card tone="bg-lavande/40">
               <h2 className="text-xl font-extrabold">{copy.home.crisisCardTitle.replace('{n}', String(attackDayNumber(active.attack)))}</h2>
-              <p className="text-muted mt-1">{copy.home.crisisCardBody}</p>
+              <p className="mt-1">{copy.home.crisisCardBody}</p>
             </Card>
           </Link>
           <MedFollowUp />
@@ -94,7 +94,7 @@ export function HomePage() {
         <Link to="/checkin" className="block">
           <Card tone="bg-sauge/30">
             <h2 className="text-xl font-extrabold">{copy.home.dailyCardTitle}</h2>
-            <p className="text-muted mt-1">{todayDone ? copy.home.dailyCardDone : copy.home.dailyCardTodo}</p>
+            <p className="mt-1">{todayDone ? copy.home.dailyCardDone : copy.home.dailyCardTodo}</p>
           </Card>
         </Link>
       )}

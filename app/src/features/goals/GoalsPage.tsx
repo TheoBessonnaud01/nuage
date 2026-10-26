@@ -42,7 +42,7 @@ export function GoalsPage() {
           const reached = i <= g.tierIndex;
           return (
             <li key={tier.id}>
-              <Card tone={i === g.tierIndex ? 'bg-surface border-sauge-fort' : reached ? 'bg-surface' : 'bg-surface opacity-60'} className="flex items-center gap-4 !p-4">
+              <Card tone={i === g.tierIndex ? 'bg-surface border-sauge-fort' : reached ? 'bg-surface' : 'bg-surface border-dashed text-muted'} className="flex items-center gap-4 !p-4">
                 <span className="text-3xl" aria-hidden>{tier.emoji}</span>
                 <div className="flex-1">
                   <p className="font-extrabold">{tier.label} {i < g.tierIndex && <span className="text-sauge-fort font-bold">· {t.reached}</span>}</p>

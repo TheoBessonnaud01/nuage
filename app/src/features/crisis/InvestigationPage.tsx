@@ -96,6 +96,7 @@ export function InvestigationPage() {
       <section className="mt-3 pb-6 space-y-4" aria-live="polite">
         {index === -1 && (
           <>
+            <h1 className="sr-only">{t.invTitle}</h1>
             <Pepite mood="detective" lineContext="enquete" size="sm" importantBubble />
             <p>{t.invIntro}</p>
             {[[days[0], t.invTwoDaysBefore], [days[1], t.invDayBefore], [days[2], t.invCrisisDay]].map(([d, label]) => {

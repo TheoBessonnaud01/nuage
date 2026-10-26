@@ -107,7 +107,7 @@ export function InsightsPage() {
         {fs.length === 0 ? <p className="mt-3 text-muted">{t.factorsEmpty}</p> : (
           <ul className="mt-3 space-y-3">
             {fs.slice(0, 8).map((f) => (
-              <li key={f.id} className={f.level === 'plus' ? '' : 'opacity-70'}>
+              <li key={f.id} className={f.level === 'plus' ? '' : 'text-muted'}>
                 <p className="font-bold">{f.label}</p>
                 <p className="text-[15px]">{t.factorLevel[f.level]}</p>
                 <p className="text-sm text-muted">{t.factorLine.replace('{avant}', String(f.before)).replace('{total}', String(f.beforeKnown)).replace('{pAvant}', String(pct(f.pBefore))).replace('{pAutres}', String(pct(f.pOther)))}</p>

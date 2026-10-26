@@ -53,7 +53,7 @@ function ListEditor({ kind, settings }: { kind: ListKind; settings: Settings }) 
       {kind === 'customFactors' && <p className="text-sm text-muted">{t.customFactorsHelp}</p>}
       <ul className="space-y-2">
         {items.map((i, idx) => (
-          <li key={i.id} className={`rounded-xl border border-line p-2 ${i.hidden ? 'opacity-60' : ''}`}>
+          <li key={i.id} className={`rounded-xl border p-2 ${i.hidden ? 'border-dashed border-muted/60 text-muted' : 'border-line'}`}>
             {editing === i.id ? (
               <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); rename(i.id); }}>
                 <input autoFocus value={draft} onChange={(e) => setDraft(e.target.value)} className="flex-1 min-h-touch rounded-lg border border-line bg-surface px-2 text-[16px]" aria-label={t.rename} />

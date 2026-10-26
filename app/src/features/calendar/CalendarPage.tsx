@@ -55,7 +55,7 @@ export function CalendarPage() {
           <button type="button" aria-label={t.next} disabled={!canGoNext} onClick={() => setMonth(addMonths(month, 1))} className="min-h-touch min-w-touch rounded-full text-2xl disabled:opacity-20">›</button>
         </div>
 
-        <div className="grid grid-cols-7 gap-1.5 text-center" role="grid" aria-label={formatMonth(month)}>
+        <div className="grid grid-cols-7 gap-1.5 text-center" role="group" aria-label={formatMonth(month)}>
           {t.weekdays.map((w, i) => <div key={i} className="text-xs font-bold text-muted pb-1" aria-hidden>{w}</div>)}
           {Array.from({ length: offset }, (_, i) => <div key={`o${i}`} />)}
           {days.map((d) => {

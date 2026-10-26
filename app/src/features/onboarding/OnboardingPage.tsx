@@ -70,6 +70,7 @@ export function OnboardingPage() {
 
   return (
     <main className="mx-auto max-w-md px-4 pt-6 !pb-0 screen-h flex flex-col">
+      <h1 className="sr-only">{config.appName}</h1>
       <p className="text-sm text-muted font-bold" aria-live="polite">{t.step.replace('{n}', String(step + 1))}</p>
       <div className="flex items-start gap-2 mt-4">
         <Mascot mood={moodsByStep[step]} size="md" />

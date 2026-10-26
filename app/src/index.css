@@ -7,7 +7,7 @@
   --bg: 247 243 236;        /* sable très clair */
   --surface: 255 253 249;
   --ink: 52 58 64;
-  --muted: 110 116 120;
+  --muted: 92 98 102;
   --line: 224 218 206;
   --sauge: 143 169 143;
   --sauge-fort: 84 112 86;
@@ -22,12 +22,12 @@
   --bg: 30 33 36;
   --surface: 41 45 49;
   --ink: 226 228 224;
-  --muted: 160 166 164;
+  --muted: 182 187 185;
   --line: 62 67 71;
   --sauge: 118 146 120;
   --sauge-fort: 168 196 168;
   --sable: 120 106 84;
-  --lavande: 120 110 150;
+  --lavande: 100 90 138;
   --ciel: 82 110 128;
   --peche: 150 112 96;
   color-scheme: dark;
@@ -38,10 +38,14 @@
   --bg: 24 25 28;
   --surface: 33 35 38;
   --ink: 196 196 192;
-  --muted: 140 142 140;
+  --muted: 168 170 168;
   --line: 50 52 55;
   --sauge: 96 116 98;
   --sauge-fort: 150 170 150;
+  --sable: 74 66 54;
+  --lavande: 72 66 98;
+  --ciel: 50 68 80;
+  --peche: 92 72 62;
   color-scheme: dark;
 }
 :root[data-crisis='on'] *, :root[data-crisis='on'] *::before, :root[data-crisis='on'] *::after {
