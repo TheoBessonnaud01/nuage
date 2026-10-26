@@ -1,6 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { HashRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { ComingSoon } from './components/ComingSoon';
+import { ErrorBoundary } from './components/ErrorBoundary';
+
+// Chargé à part (graphique Recharts) pour que l'app démarre plus vite ; reste disponible hors ligne.
+const MonthsPage = lazy(() => import('./features/monthly/MonthsPage').then((m) => ({ default: m.MonthsPage })));
 import { copy } from './content/copy';
 import { CalendarPage } from './features/calendar/CalendarPage';
 import { DayPage } from './features/calendar/DayPage';
@@ -18,6 +22,9 @@ import { UrgentPage } from './features/crisis/UrgentPage';
 import { CelebrationPage } from './features/goals/CelebrationPage';
 import { GoalsPage } from './features/goals/GoalsPage';
 import { HomePage } from './features/home/HomePage';
+import { InsightsPage } from './features/insights/InsightsPage';
+import { MonthRecapPage } from './features/monthly/MonthRecapPage';
+
 import { OnboardingPage } from './features/onboarding/OnboardingPage';
 import { MascotPreview } from './mascot/MascotPreview';
 import { SettingsPage } from './features/settings/SettingsPage';
@@ -33,6 +40,7 @@ export function App() {
     <HashRouter>
       <ThemeSync theme={settings?.theme ?? 'auto'} />
       <OnboardingGate done={settings ? settings.onboardingDone : null} />
+      <ErrorBoundary>
       <Routes>
         <Route path="/bienvenue" element={<OnboardingPage />} />
         <Route path="/" element={<HomePage />} />
@@ -52,13 +60,16 @@ export function App() {
         <Route path="/crise/recap/:id" element={<RecapPage />} />
         <Route path="/urgence" element={<UrgentPage />} />
         <Route path="/calendrier" element={<CalendarPage />} />
-        <Route path="/mois" element={<ComingSoon title={copy.home.nav.months} />} />
+        <Route path="/mois" element={<Suspense fallback={null}><MonthsPage /></Suspense>} />
+        <Route path="/mois/:month" element={<MonthRecapPage />} />
+        <Route path="/analyses" element={<InsightsPage />} />
         <Route path="/comprendre" element={<ComingSoon title={copy.home.nav.info} />} />
         <Route path="/reglages" element={<SettingsPage />} />
         <Route path="/rappels" element={<FallbackRemindersPage />} />
         {import.meta.env.DEV && <Route path="/mascot-preview" element={<MascotPreview />} />}
         <Route path="*" element={<HomePage />} />
       </Routes>
+      </ErrorBoundary>
     </HashRouter>
   );
 }

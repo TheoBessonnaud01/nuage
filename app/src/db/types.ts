@@ -84,7 +84,7 @@ export interface PostdromeLog {
   note?: string;
 }
 
-// Détaillé à l'étape 5
+// Contenu détaillé : voir RecapData dans lib/recap.ts
 export type MonthlyRecapData = Record<string, unknown>;
 
 export interface MonthlyRecap {

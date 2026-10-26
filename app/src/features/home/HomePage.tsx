@@ -9,6 +9,8 @@ import { useGoals } from '../../lib/useGoals';
 import { useActiveAttack } from '../../lib/useAttack';
 import { attackDayNumber } from '../../lib/attacks';
 import { MedFollowUp } from '../crisis/MedFollowUp';
+import { useRecaps } from '../../lib/useInsights';
+import { formatMonth } from '../../lib/dates';
 import { PostdromeSlider } from '../crisis/PostdromeSlider';
 import { getMood, homeLineContext } from '../../mascot/moodEngine';
 import { Pepite } from '../../mascot/Pepite';
@@ -17,6 +19,7 @@ import { useMoodContext } from '../../mascot/useMoodContext';
 const navItems = [
   { to: '/calendrier', label: copy.home.nav.calendar, icon: '🗓️' },
   { to: '/mois', label: copy.home.nav.months, icon: '📈' },
+  { to: '/analyses', label: copy.home.nav.insights, icon: '🔎' },
   { to: '/comprendre', label: copy.home.nav.info, icon: '📖' },
   { to: '/reglages', label: copy.home.nav.settings, icon: '⚙️' },
 ];
@@ -32,6 +35,7 @@ export function HomePage() {
   const settings = useSettings();
   const mascotHidden = settings?.mascotMode === 'masqué';
   const goalsInfo = useGoals();
+  const unseenRecap = useRecaps()?.find((r) => !r.seen);
   const active = useActiveAttack();
   const inCrisis = active?.attack.status === 'en cours';
   const inPost = active?.attack.status === 'post-crise';
@@ -92,6 +96,12 @@ export function HomePage() {
       {goalsInfo?.pendingCelebration && (
         <Link to="/palier" className="block">
           <Card tone="bg-peche/50"><p className="font-extrabold">{copy.goals.banner}</p></Card>
+        </Link>
+      )}
+
+      {unseenRecap && (
+        <Link to={`/mois/${unseenRecap.month}`} className="block">
+          <Card tone="bg-peche/40"><p className="font-extrabold">{copy.months.banner.replace('{mois}', formatMonth(unseenRecap.month).split(' ')[0])}</p></Card>
         </Link>
       )}
 
