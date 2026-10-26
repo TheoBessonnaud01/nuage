@@ -1,6 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import { Card, PageHeader } from '../../components/ui';
+import { Button, Card, PageHeader } from '../../components/ui';
+import { shareOrDownload } from '../../lib/share';
+import { useSettings } from '../../lib/useSettings';
 import { copy } from '../../content/copy';
 import { medicationCategories } from '../../content/factors';
 import { formatDuration } from '../../lib/attacks';
@@ -22,6 +24,7 @@ function Cmp({ now, base, label }: { now: number | null; base: number | null | u
 export function MonthRecapPage() {
   const { month = '' } = useParams();
   const recaps = useRecaps();
+  const settings = useSettings();
   const recap = recaps?.find((r) => r.month === month);
   useEffect(() => { if (recap && !recap.seen) markRecapSeen(month); }, [recap, month]);
   const opening = useMemo(() => {
@@ -103,7 +106,11 @@ export function MonthRecapPage() {
         <p className="mt-1">{t.victory[d.victory.key].replace('{n}', String(d.victory.n))}</p>
       </Card>
 
-      <p className="text-sm text-muted text-center">{t.disclaimer}<br />{t.pdfSoon}</p>
+      <Button variant="secondary" onClick={async () => {
+        const { recapPdf } = await import('../../lib/pdf');
+        await shareOrDownload([{ name: `nuage-recap-${month}.pdf`, blob: recapPdf(d, settings?.firstName ?? '') }], t.title.replace('{mois}', formatMonth(month)));
+      }}>{copy.data.recapPdf}</Button>
+      <p className="text-sm text-muted text-center">{t.disclaimer}</p>
     </main>
   );
 }

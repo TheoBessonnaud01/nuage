@@ -3,15 +3,18 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { ChipList } from '../../components/crisisInputs';
 import { Wizard, type WizardStep } from '../../components/Wizard';
 import { copy } from '../../content/copy';
-import { postdromeSymptoms } from '../../content/factors';
+import {} from '../../content/factors';
 import { addPostdromeLog } from '../../db/attacks';
 import { useActiveAttack } from '../../lib/useAttack';
+import { visibleList } from '../../lib/lists';
+import { useSettings } from '../../lib/useSettings';
 
 const t = copy.crisis;
 
 /** Suivi quotidien de la phase post-crise. */
 export function PostdromePage() {
   const data = useActiveAttack();
+  const settings = useSettings();
   const navigate = useNavigate();
   const [symptoms, setSymptoms] = useState<string[]>([]);
   const [pct, setPct] = useState(50);
@@ -21,7 +24,7 @@ export function PostdromePage() {
   if (!data || data.attack.status !== 'post-crise') return <Navigate to="/crise" replace />;
 
   const steps: WizardStep[] = [
-    { key: 'ressenti', title: t.postSymptomsTitle, help: t.postSymptomsHelp, render: () => <ChipList items={postdromeSymptoms} selected={symptoms} onChange={setSymptoms} /> },
+    { key: 'ressenti', title: t.postSymptomsTitle, help: t.postSymptomsHelp, render: () => <ChipList items={visibleList('postdromeSymptoms', settings)} selected={symptoms} onChange={setSymptoms} /> },
     {
       key: 'pourcent', title: t.postPercentTitle,
       render: () => (

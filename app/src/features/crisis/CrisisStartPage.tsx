@@ -4,10 +4,12 @@ import { ChipList, HeadMap, IntensityPicker, WhenPicker } from '../../components
 import { Chip } from '../../components/inputs';
 import { Wizard, type WizardStep } from '../../components/Wizard';
 import { copy } from '../../content/copy';
-import { auraTypes, crisisSymptoms, painTypes } from '../../content/factors';
+import { auraTypes, painTypes } from '../../content/factors';
 import { startAttack } from '../../db/attacks';
 import type { Attack } from '../../db/types';
 import { useActiveAttack } from '../../lib/useAttack';
+import { visibleList } from '../../lib/lists';
+import { useSettings } from '../../lib/useSettings';
 import { Pepite } from '../../mascot/Pepite';
 import { UrgentLink } from './UrgentLink';
 
@@ -16,6 +18,7 @@ const t = copy.crisis;
 /** Déclenchement d'une crise : 6 écrans maximum, tout est facultatif. */
 export function CrisisStartPage() {
   const active = useActiveAttack();
+  const settings = useSettings();
   const navigate = useNavigate();
   const [startAt, setStartAt] = useState(() => new Date().toISOString());
   const [aura, setAura] = useState<Attack['hadAura'] | undefined>();
@@ -51,7 +54,7 @@ export function CrisisStartPage() {
     { key: 'intensite', title: t.intensityTitle, help: t.intensityHelp, render: (next) => <IntensityPicker value={intensity} onChange={(v) => { setIntensity(v); setTimeout(next, 250); }} /> },
     { key: 'ou', title: t.locationTitle, render: () => <HeadMap selected={locations} onChange={setLocations} /> },
     { key: 'type', title: t.painTypeTitle, render: () => <ChipList items={painTypes} selected={painType} onChange={setPainType} /> },
-    { key: 'symptomes', title: t.symptomsTitle, render: () => <ChipList items={crisisSymptoms} selected={symptoms} onChange={setSymptoms} /> },
+    { key: 'symptomes', title: t.symptomsTitle, render: () => <ChipList items={visibleList('crisisSymptoms', settings)} selected={symptoms} onChange={setSymptoms} /> },
   ];
 
   const finish = async () => {

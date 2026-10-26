@@ -29,6 +29,10 @@ import { OnboardingPage } from './features/onboarding/OnboardingPage';
 import { MascotPreview } from './mascot/MascotPreview';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { FallbackRemindersPage } from './features/settings/FallbackRemindersPage';
+import { AboutPage } from './features/settings/AboutPage';
+import { DataPage } from './features/settings/DataPage';
+import { ListsPage } from './features/settings/ListsPage';
+import { MedicationsSettingsPage } from './features/settings/MedicationsSettingsPage';
 import { applyTheme } from './lib/theme';
 import { useCrisisActive, useSettings } from './lib/useSettings';
 import type { Settings } from './db/types';
@@ -67,6 +71,10 @@ export function App() {
         <Route path="/comprendre/:id" element={<InfoCardPage />} />
         <Route path="/reglages" element={<SettingsPage />} />
         <Route path="/rappels" element={<FallbackRemindersPage />} />
+        <Route path="/reglages/listes" element={<ListsPage />} />
+        <Route path="/reglages/traitements" element={<MedicationsSettingsPage />} />
+        <Route path="/reglages/donnees" element={<DataPage />} />
+        <Route path="/reglages/apropos" element={<AboutPage />} />
         {import.meta.env.DEV && <Route path="/mascot-preview" element={<MascotPreview />} />}
         <Route path="*" element={<HomePage />} />
       </Routes>

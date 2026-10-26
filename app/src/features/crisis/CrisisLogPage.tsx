@@ -5,16 +5,19 @@ import { Chip } from '../../components/inputs';
 import { Button } from '../../components/ui';
 import { Wizard, type WizardStep } from '../../components/Wizard';
 import { copy } from '../../content/copy';
-import { crisisSymptoms, functionalLevels, relievedBy, worsenedBy } from '../../content/factors';
+import { functionalLevels, relievedBy, worsenedBy } from '../../content/factors';
 import { addAttackLog } from '../../db/attacks';
 import type { AttackDayLog } from '../../db/types';
 import { useActiveAttack } from '../../lib/useAttack';
+import { visibleList } from '../../lib/lists';
+import { useSettings } from '../../lib/useSettings';
 
 const t = copy.crisis;
 
 /** Suivi pendant la crise (plusieurs fois par jour si besoin). */
 export function CrisisLogPage() {
   const data = useActiveAttack();
+  const settings = useSettings();
   const navigate = useNavigate();
   const [intensity, setIntensity] = useState<number | undefined>();
   const [symptoms, setSymptoms] = useState<string[]>([]);
@@ -28,7 +31,7 @@ export function CrisisLogPage() {
 
   const steps: WizardStep[] = [
     { key: 'intensite', title: t.intensityTitle, help: t.intensityHelp, render: (next) => <IntensityPicker value={intensity} onChange={(v) => { setIntensity(v); setTimeout(next, 250); }} /> },
-    { key: 'symptomes', title: t.symptomsTitle, render: () => <ChipList items={crisisSymptoms} selected={symptoms} onChange={setSymptoms} /> },
+    { key: 'symptomes', title: t.symptomsTitle, render: () => <ChipList items={visibleList('crisisSymptoms', settings)} selected={symptoms} onChange={setSymptoms} /> },
     { key: 'pire', title: t.worsenedTitle, render: () => <ChipList items={worsenedBy} selected={worse} onChange={setWorse} /> },
     { key: 'mieux', title: t.relievedTitle, render: () => <ChipList items={relievedBy} selected={better} onChange={setBetter} /> },
     {

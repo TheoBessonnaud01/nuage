@@ -36,6 +36,12 @@ export function HomePage() {
   const mascotHidden = settings?.mascotMode === 'masqué';
   const goalsInfo = useGoals();
   const unseenRecap = useRecaps()?.find((r) => !r.seen);
+  const firstDay = useLiveQuery(async () => (await db.days.orderBy('date').first())?.date, []);
+  const needBackup = (() => {
+    const monthAgo = Date.now() - 30 * 86400000;
+    if (settings?.lastBackupAt) return new Date(settings.lastBackupAt).getTime() < monthAgo;
+    return !!firstDay && new Date(`${firstDay}T12:00:00Z`).getTime() < monthAgo;
+  })();
   const active = useActiveAttack();
   const inCrisis = active?.attack.status === 'en cours';
   const inPost = active?.attack.status === 'post-crise';
@@ -122,6 +128,12 @@ export function HomePage() {
                 .replace('{emoji}', g.tier.emoji)}
           </span>
           <span className="text-muted text-sm">{copy.goals.title} ›</span>
+        </Link>
+      )}
+
+      {needBackup && (
+        <Link to="/reglages/donnees" className="block rounded-2xl border border-dashed border-line px-4 py-3 text-[15px] text-muted">
+          {settings?.lastBackupAt ? copy.data.backupBanner : copy.data.backupBannerNever}
         </Link>
       )}
 

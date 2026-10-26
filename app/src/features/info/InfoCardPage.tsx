@@ -18,8 +18,7 @@ export function InfoCardPage() {
       </Card>
       {card.id === 'consultation' && (
         <Card tone="bg-sauge/25">
-          <p className="text-[15px]">{t.exportSoon}</p>
-          <Link to="/analyses" className="inline-block mt-2 font-bold underline">{t.toExport}</Link>
+          <Link to="/reglages/donnees" className="font-bold underline">{t.toExport}</Link>
         </Card>
       )}
       <p className="text-sm text-muted">
