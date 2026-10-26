@@ -3,6 +3,9 @@ name = "nuage-notifications"
 main = "src/index.ts"
 compatibility_date = "2024-10-01"
 
+# Publie le Worker sur https://nuage-notifications.<sous-domaine>.workers.dev
+workers_dev = true
+
 # Toutes les 15 minutes : rappels, messages du matin pendant une crise, relances, récap, sauvegarde
 [triggers]
 crons = ["*/15 * * * *"]
@@ -11,7 +14,7 @@ crons = ["*/15 * * * *"]
 # Remplace l'id par celui affiché par : npx wrangler kv namespace create SUBS
 [[kv_namespaces]]
 binding = "SUBS"
-id = "A_REMPLACER"
+id = "232725fb477e411682b94d7ed59d3d77"
 
 [vars]
 ALLOWED_ORIGIN = "https://theobessonnaud01.github.io"
