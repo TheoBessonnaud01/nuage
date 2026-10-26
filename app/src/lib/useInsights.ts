@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db, getSettings } from '../db/db';
+import { db } from '../db/db';
 import type { CalendarData } from './calendar';
 import { addMonths, localDay, monthOf } from './dates';
 import type { InsightsData } from './insights';
@@ -7,11 +7,12 @@ import { buildRecap, coreStats, monthsToGenerate, toStored, type RecapData } fro
 import { loadGoals } from './useGoals';
 
 export async function loadInsightsData(): Promise<{ data: InsightsData; cal: CalendarData }> {
+  // Lecture seule (utilisable dans une liveQuery) : pas de getSettings(), qui peut écrire.
   const [entries, attacks, logs, meds, postLogs, settings] = await Promise.all([
-    db.days.toArray(), db.attacks.toArray(), db.attackLogs.toArray(), db.medications.toArray(), db.postdromeLogs.toArray(), getSettings(),
+    db.days.toArray(), db.attacks.toArray(), db.attackLogs.toArray(), db.medications.toArray(), db.postdromeLogs.toArray(), db.settings.get('main'),
   ]);
   return {
-    data: { entries, attacks, logs, meds, postLogs, customFactors: settings.customLists.factors },
+    data: { entries, attacks, logs, meds, postLogs, customFactors: settings?.customLists.factors ?? [] },
     cal: { entries: new Map(entries.map((e) => [e.date, e])), attacks, attackLogs: logs, postdromeDays: new Set(postLogs.map((p) => p.date)) },
   };
 }

@@ -8,5 +8,5 @@ export function applyTheme(theme: Settings['theme'], crisis: boolean) {
   root.dataset.theme = dark ? 'sombre' : 'clair';
   root.dataset.crisis = crisis ? 'on' : 'off';
   const meta = document.querySelector('meta[name="theme-color"]');
-  meta?.setAttribute('content', crisis ? '#18191C' : dark ? '#1E2124' : '#8FA98F');
+  meta?.setAttribute('content', crisis ? '#121118' : dark ? '#15121E' : '#FBF7F4');
 }

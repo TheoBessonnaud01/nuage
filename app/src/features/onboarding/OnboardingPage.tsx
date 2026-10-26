@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { config } from '../../config';
 import { copy, withName } from '../../content/copy';
-import { ActionBar, Button, Card } from '../../components/ui';
+import { ActionBar, Button } from '../../components/ui';
 import { updateSettings } from '../../db/db';
 import { canPromptInstall, detectPlatform, isStandalone, onInstallAvailable, promptInstall } from '../../lib/install';
 import { Mascot } from '../../mascot/Mascot';
 import type { Mood } from '../../mascot/moods';
 import { SpeechBubble } from '../../mascot/SpeechBubble';
+import { Icon, type IconName } from '../../ui/Icon';
 import { useSettings } from '../../lib/useSettings';
 import { enablePush, pushState, type PushState } from '../../lib/push';
 
@@ -40,7 +41,7 @@ function RemindersStep({ time }: { time: string }) {
   const [state, setState] = useState<PushState | null>(null);
   useEffect(() => { pushState().then(setState); }, []);
   if (!state || state === 'non-configure' || state === 'non-supporte' || state === 'refuse') return null;
-  if (state === 'ios-installer') return <p className="text-muted text-[15px]">{t.s4RemindersIosLater}</p>;
+  if (state === 'ios-installer') return <p className="text-c-muted text-[15px]">{t.s4RemindersIosLater}</p>;
   if (state === 'on') return <p className="font-bold">{t.s4RemindersOn}</p>;
   return (
     <div className="space-y-2">
@@ -68,45 +69,57 @@ export function OnboardingPage() {
     t.s4Title,
   ][step];
 
+  const tones = ['grad-hero', 'grad-lilac', 'grad-mint', 'grad-peach'];
   return (
-    <main className="mx-auto max-w-md px-4 pt-6 !pb-0 screen-h flex flex-col">
+    <main className="mx-auto max-w-md px-4 pt-5 !pb-0 screen-h flex flex-col">
       <h1 className="sr-only">{config.appName}</h1>
-      <p className="text-sm text-muted font-bold" aria-live="polite">{t.step.replace('{n}', String(step + 1))}</p>
-      <div className="flex items-start gap-2 mt-4">
-        <Mascot mood={moodsByStep[step]} size="md" />
-        <SpeechBubble key={step} className="mt-4 flex-1 text-lg">{bubble}</SpeechBubble>
+      <div className="flex items-center justify-between">
+        <div className="flex gap-1.5" role="img" aria-label={t.step.replace('{n}', String(step + 1))}>
+          {[0, 1, 2, 3].map((i) => <span key={i} className={`h-2 rounded-full transition-all ${i === step ? 'w-7 bg-c-primary' : 'w-2 bg-c-ink/15'}`} />)}
+        </div>
+        <p className="text-[13px] text-c-muted font-bold" aria-live="polite">{t.step.replace('{n}', String(step + 1))}</p>
       </div>
 
-      <Card className="mt-6 mb-6 space-y-4 text-[16px]">
+      <div className={`relative mt-5 rounded-[32px] ${tones[step]} shadow-float overflow-hidden pt-6 pb-2 flex flex-col items-center`}>
+        <SpeechBubble key={step} pointer="top" className="mx-5 self-stretch text-[17px] font-display">{bubble}</SpeechBubble>
+        <Mascot mood={moodsByStep[step]} size={190} />
+      </div>
+
+      <div className="mt-5 mb-6 space-y-4 text-[16px]">
         {step === 0 && (
-          <p>{t.s1Body.replace('{mascotte}', config.mascotName).replace('{app}', config.appName)}</p>
+          <p className="font-display text-[22px] leading-snug font-medium">{t.s1Body.replace('{mascotte}', config.mascotName).replace('{app}', config.appName)}</p>
         )}
         {step === 1 && (
-          <ul className="space-y-4">
+          <ul className="space-y-3">
             {t.s2Items.map((i) => (
-              <li key={i.title} className="flex gap-3">
-                <span className="text-2xl" aria-hidden>{i.icon}</span>
-                <span><strong>{i.title}</strong><br /><span className="text-muted">{i.body}</span></span>
+              <li key={i.title} className="flex items-center gap-4 rounded-[22px] bg-c-surface shadow-soft p-4">
+                <span className="grid place-items-center w-12 h-12 rounded-2xl grad-peach text-c-on-grad shrink-0"><Icon name={i.icon as IconName} /></span>
+                <span><strong className="font-display text-[18px] font-semibold">{i.title}</strong><br /><span className="text-c-muted text-[14.5px]">{i.body}</span></span>
               </li>
             ))}
           </ul>
         )}
-        {step === 2 && <p>{t.s3Body}</p>}
+        {step === 2 && (
+          <div className="flex gap-4 items-start rounded-[22px] bg-c-surface shadow-soft p-5">
+            <span className="grid place-items-center w-12 h-12 rounded-2xl grad-mint text-c-on-grad shrink-0"><Icon name="lock" /></span>
+            <p>{t.s3Body}</p>
+          </div>
+        )}
         {step === 3 && (
-          <>
+          <div className="space-y-4 rounded-[22px] bg-c-surface shadow-soft p-5">
             <InstallStep />
             <RemindersStep time={settings?.reminderTime ?? config.defaultReminderTime} />
-          </>
+          </div>
         )}
-      </Card>
+      </div>
 
-      <ActionBar className="space-y-2">
-        {step < 3
-          ? <Button onClick={() => setStep(step + 1)}>{t.next}</Button>
-          : <Button onClick={finish}>{t.start}</Button>}
+      <ActionBar className="flex gap-3">
         {step > 0 && (
-          <Button variant="ghost" onClick={() => setStep(step - 1)}>{copy.common.back}</Button>
+          <Button variant="ghost" className="!w-auto px-5" onClick={() => setStep(step - 1)} aria-label={copy.common.back}><Icon name="chevron-left" /></Button>
         )}
+        {step < 3
+          ? <Button onClick={() => setStep(step + 1)}>{t.next}<Icon name="arrow-right" size={19} /></Button>
+          : <Button onClick={finish}>{t.start}</Button>}
       </ActionBar>
     </main>
   );

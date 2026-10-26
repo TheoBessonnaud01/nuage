@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
-import { ActionBar, Button, Card } from '../../components/ui';
+import { ActionBar, BackButton, Button, Card } from '../../components/ui';
+import { Icon } from '../../ui/Icon';
 import { Chip, EmojiScale, HoursPicker, ProgressBar } from '../../components/inputs';
 import { copy, withName } from '../../content/copy';
 import { checkinScreens, type Part, type Screen } from '../../content/questions';
@@ -14,6 +15,9 @@ import { useSettings } from '../../lib/useSettings';
 import { fetchWeather } from '../../lib/weather';
 import { pickLine } from '../../mascot/lines';
 import { Pepite } from '../../mascot/Pepite';
+import { Mascot } from '../../mascot/Mascot';
+import { GrowthStage } from '../../ui/Garden';
+import { Ring } from '../../ui/kit';
 import { InfoSuggestion } from '../info/InfoSuggestion';
 
 const t = copy.checkin;
@@ -113,12 +117,13 @@ function CheckinFlow({ date }: { date: string }) {
 
   return (
     <main className="mx-auto max-w-md px-4 pt-4 !pb-0 screen-h flex flex-col">
-      <header className="flex items-center gap-2">
-        <button type="button" onClick={back} aria-label={copy.common.back} className="min-h-touch min-w-touch grid place-items-center rounded-full text-2xl">‹</button>
-        <div className="flex-1">
-          <p className="text-sm font-bold text-muted">{title.replace('{jour}', dayLabel)}</p>
+      <header className="flex items-center gap-3">
+        <BackButton onClick={back} label={copy.common.back} />
+        <div className="flex-1 space-y-1.5">
+          <p className="text-[13px] font-bold text-c-muted first-letter:uppercase">{title.replace('{jour}', dayLabel)}</p>
           <ProgressBar value={(index + 1) / screens.length} label={t.progress.replace('{n}', String(index + 1)).replace('{total}', String(screens.length))} />
         </div>
+        <span className="text-[13px] font-bold text-c-muted tabular-nums">{index + 1}/{screens.length}</span>
       </header>
 
       <div className="mt-3 min-h-[80px]">
@@ -126,7 +131,7 @@ function CheckinFlow({ date }: { date: string }) {
       </div>
 
       <section className="mt-2 pb-6 space-y-5" aria-live="polite">
-        <h1 className="text-2xl font-extrabold">{isLate ? screen.title.replace('aujourd’hui', 'ce jour-là') : screen.title}</h1>
+        <h1 className="font-display text-[28px] leading-tight font-semibold">{isLate ? screen.title.replace('aujourd’hui', 'ce jour-là') : screen.title}</h1>
         <InfoBox screen={screen} />
         {screen.parts.map((part) => (
           <PartInput
@@ -148,7 +153,7 @@ function CheckinFlow({ date }: { date: string }) {
           // « Suivant » valide la durée affichée par défaut ; « Passer » ne garde rien.
           if (screen.parts.some((p) => p.kind === 'hours') && entry.sleepHours === undefined) await save({ sleepHours: DEFAULT_SLEEP });
           next();
-        }}>{index === screens.length - 1 ? t.finish : copy.common.next}</Button>
+        }}>{index === screens.length - 1 ? t.finish : copy.common.next}<Icon name="arrow-right" size={19} /></Button>
       </ActionBar>
     </main>
   );
@@ -158,12 +163,12 @@ function InfoBox({ screen }: { screen: Screen }) {
   const [open, setOpen] = useState(false);
   if (!screen.info) return null;
   return open ? (
-    <Card tone="bg-ciel/40" className="text-[16px]">
+    <Card tone="grad-sky" className="text-[16px]">
       <p>{screen.info.body}</p>
       <button type="button" onClick={() => setOpen(false)} className="mt-2 font-bold underline min-h-touch">{t.infoClose}</button>
     </Card>
   ) : (
-    <button type="button" onClick={() => setOpen(true)} className="font-bold underline text-sauge-fort min-h-touch">ⓘ {screen.info.button}</button>
+    <button type="button" onClick={() => setOpen(true)} className="press inline-flex items-center gap-1.5 min-h-[44px] rounded-full bg-c-surface shadow-soft px-4 font-bold text-[14px] text-c-ink"><Icon name="info" size={18} />{screen.info.button}</button>
   );
 }
 
@@ -176,7 +181,7 @@ export function PartInput({
   onChange: (patch: Partial<DayEntry>) => void;
 }) {
   const [tip, setTip] = useState<string | null>(null);
-  const label = 'label' in part && part.label ? <h2 className="font-bold text-muted mb-2">{part.label}</h2> : null;
+  const label = 'label' in part && part.label ? <h2 className="font-bold text-c-muted mb-2">{part.label}</h2> : null;
 
   switch (part.kind) {
     case 'hours':
@@ -195,7 +200,7 @@ export function PartInput({
     case 'scale':
       return (
         <div>{label}
-          <EmojiScale label={part.label} value={entry[part.field]} options={part.options} onChange={(v) => onChange({ [part.field]: v })} />
+          <EmojiScale label={part.label} value={entry[part.field]} options={part.options} invert={part.invert} onChange={(v) => onChange({ [part.field]: v })} />
         </div>
       );
     case 'choice':
@@ -233,7 +238,7 @@ export function PartInput({
               <Chip key={i.id} emoji={i.emoji} selected={selected.has(i.id)} onClick={() => toggle(i.id)}>{i.label}</Chip>
             ))}
           </div>
-          {tip && <p className="mt-3 text-[15px] text-muted" aria-live="polite">💡 {tip}</p>}
+          {tip && <p className="mt-3 text-[15px] text-c-muted" aria-live="polite">💡 {tip}</p>}
         </div>
       );
     }
@@ -244,7 +249,7 @@ export function PartInput({
           onChange={(e) => onChange({ note: e.target.value.trim() ? e.target.value : undefined })}
           placeholder={part.placeholder}
           rows={5}
-          className="w-full rounded-2xl border-2 border-line bg-surface p-4 text-[16px] focus:border-sauge-fort outline-none"
+          className="field w-full"
         />
       );
   }
@@ -257,26 +262,31 @@ function DoneScreen({ date, isLate, entry, firstName }: { date: string; isLate: 
 
   return (
     <main className="mx-auto max-w-md px-4 py-6 space-y-5">
-      <Pepite mood={isLate ? 'joyeux' : 'fier'} text={line} size="md" importantBubble />
-      <Card>
-        <h1 className="text-2xl font-extrabold">{t.doneTitle}</h1>
-        <p className="text-muted mt-1">{isLate ? t.doneLateBody : t.doneBody}</p>
-        {g && g.thisWeekTarget !== null && date >= addDays(localDay(), -6) && (
-          <p className="mt-3 font-bold">
-            {t.weekProgress.replace('{n}', String(g.thisWeekCount)).replace('{target}', String(g.thisWeekTarget)).replace('{emoji}', g.tier.emoji)}
-          </p>
-        )}
-      </Card>
+      <div className="relative rounded-[32px] grad-hero shadow-float overflow-hidden px-5 pt-6 text-center text-c-on-grad">
+        <span className="inline-grid place-items-center w-14 h-14 rounded-full bg-c-surface/70 mb-2"><Icon name="check" size={30} strokeWidth={2.6} /></span>
+        <h1 className="font-display text-[32px] leading-tight font-semibold">{t.doneTitle}</h1>
+        <p className="mt-1 font-medium">{isLate ? t.doneLateBody : t.doneBody}</p>
+        <div className="flex justify-center mt-2"><Mascot mood={isLate ? 'joyeux' : 'fier'} size={170} /></div>
+      </div>
+      <p className="bubble-in glass shadow-soft rounded-[22px] px-4 py-3 text-[15px] font-semibold text-center" aria-live="polite">{line}</p>
 
-      {info?.pendingCelebration && (
-        <Link to="/palier" className="block"><Card tone="bg-peche/50"><p className="font-extrabold">{copy.goals.banner}</p></Card></Link>
+      {g && g.thisWeekTarget !== null && date >= addDays(localDay(), -6) && (
+        <Card className="!p-4 flex items-center gap-3">
+          <GrowthStage stage={g.tier.id} size={52} />
+          <p className="flex-1 font-display text-[18px] font-semibold">{copy.home.weekProgress.replace('{n}', String(g.thisWeekCount)).replace('{target}', String(g.thisWeekTarget))}</p>
+          <Ring value={g.thisWeekCount / g.thisWeekTarget}><span className="text-[13px] font-bold">{g.thisWeekCount}/{g.thisWeekTarget}</span></Ring>
+        </Card>
+      )}
+
+      {info?.pendingCelebration && g && (
+        <Link to="/palier" className="press block"><Card tone="grad-sun" className="!p-4 flex items-center gap-3"><GrowthStage stage={g.tier.id} size={48} /><p className="flex-1 font-bold">{copy.goals.banner}</p><Icon name="chevron-right" /></Card></Link>
       )}
 
       <InfoSuggestion trigger="premier-signal" when={(entry.warningSigns?.length ?? 0) > 0} />
 
       {entry.headacheToday === 'migraine' && (
-        <Card tone="bg-lavande/40">
-          <h2 className="text-xl font-extrabold">{t.migraineTitle}</h2>
+        <Card tone="grad-lilac">
+          <h2 className="font-display text-[21px] leading-tight font-semibold">{t.migraineTitle}</h2>
           <p className="mt-1">{t.migraineBody}</p>
           <Link to="/crise" className="block mt-3"><Button tabIndex={-1}>{t.migraineYes}</Button></Link>
         </Card>

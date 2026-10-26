@@ -14,11 +14,11 @@ export function FallbackRemindersPage() {
       <PageHeader title={t.title} backTo="/reglages" />
       <p>{t.intro}</p>
       <Card>
-        <h2 className="font-extrabold mb-2">{t.iosTitle}</h2>
+        <h2 className="font-display text-[19px] leading-tight font-semibold mb-2">{t.iosTitle}</h2>
         <ol className="list-decimal pl-5 space-y-2">{t.ios.map((s) => <li key={s} className="break-words">{fill(s)}</li>)}</ol>
       </Card>
       <Card>
-        <h2 className="font-extrabold mb-2">{t.androidTitle}</h2>
+        <h2 className="font-display text-[19px] leading-tight font-semibold mb-2">{t.androidTitle}</h2>
         <ol className="list-decimal pl-5 space-y-2">{t.android.map((s) => <li key={s} className="break-words">{fill(s)}</li>)}</ol>
       </Card>
       <Button variant="secondary" onClick={async () => { try { await navigator.clipboard.writeText(url); setCopied(true); } catch { /* rien */ } }}>

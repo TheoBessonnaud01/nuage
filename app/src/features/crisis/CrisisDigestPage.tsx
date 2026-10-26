@@ -20,7 +20,7 @@ export function CrisisDigestPage() {
     <main className="mx-auto max-w-md px-4 pt-4 !pb-0 screen-h flex flex-col">
       <div className="space-y-4 pb-6">
         <Pepite mood="calin" lineContext={state?.start ? 'debutCrise' : 'criseEnCours'} size="sm" animated={false} tappable={false} />
-        <h1 className="text-xl font-extrabold">{state?.start ? t.digestStartTitle : t.digestTitle}</h1>
+        <h1 className="font-display text-[21px] leading-tight font-semibold">{state?.start ? t.digestStartTitle : t.digestTitle}</h1>
         <CrisisDigest data={data} />
         <InfoSuggestion trigger="premiere-aura" when={!!state?.start && data.attack.hadAura === 'oui'} />
       </div>

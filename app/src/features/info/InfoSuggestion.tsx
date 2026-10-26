@@ -4,6 +4,8 @@ import { Card } from '../../components/ui';
 import { copy } from '../../content/copy';
 import { findCard } from '../../content/infoCards';
 import { claimInfoCard, type InfoTrigger } from '../../lib/infoSuggest';
+import { Icon } from '../../ui/Icon';
+import { styleOf } from './cardStyle';
 
 const t = copy.info;
 
@@ -21,12 +23,12 @@ export function InfoSuggestion({ trigger, when = true }: { trigger: InfoTrigger;
   const card = id ? findCard(id) : null;
   if (!card || closed) return null;
   return (
-    <Card tone="bg-ciel/40" className="!p-4">
-      <p className="text-sm font-bold text-muted">📖 {t.suggestion}</p>
-      <p className="font-extrabold mt-1">{card.emoji} {card.titre}</p>
+    <Card tone="grad-sky" className="!p-4">
+      <p className="text-sm font-bold text-c-muted">📖 {t.suggestion}</p>
+      <p className="font-display text-[19px] font-semibold mt-1 flex items-center gap-2"><Icon name={styleOf(card.id).icon} />{card.titre}</p>
       <div className="flex gap-3 mt-3">
-        <Link to={`/comprendre/${card.id}`} className="flex-1 min-h-touch grid place-items-center rounded-xl bg-sauge-fort text-surface font-bold">{t.read}</Link>
-        <button type="button" onClick={() => setClosed(true)} className="flex-1 min-h-touch rounded-xl border border-line font-bold">{t.dismiss}</button>
+        <Link to={`/comprendre/${card.id}`} className="press flex-1 min-h-[48px] grid place-items-center rounded-full bg-c-primary text-c-on-primary font-bold">{t.read}</Link>
+        <button type="button" onClick={() => setClosed(true)} className="press flex-1 min-h-[48px] rounded-full bg-c-surface/70 font-bold">{t.dismiss}</button>
       </div>
     </Card>
   );

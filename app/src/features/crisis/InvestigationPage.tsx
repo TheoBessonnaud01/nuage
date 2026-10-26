@@ -88,7 +88,7 @@ export function InvestigationPage() {
       <header className="flex items-center gap-2">
         <button type="button" onClick={() => (index >= 0 ? setIndex(index - 1) : navigate(-1))} aria-label={copy.common.back} className="min-h-touch min-w-touch grid place-items-center rounded-full text-2xl">‹</button>
         <div className="flex-1">
-          <p className="text-sm font-bold text-muted">{t.invTitle}</p>
+          <p className="text-sm font-bold text-c-muted">{t.invTitle}</p>
           {index >= 0 && <ProgressBar value={(index + 1) / total} label={`${index + 1} / ${total}`} />}
         </div>
       </header>
@@ -103,10 +103,10 @@ export function InvestigationPage() {
               const r = entries[d].date ? rows(entries[d] as DayEntry) : [];
               return (
                 <Card key={d} className="!p-4">
-                  <h2 className="font-extrabold">{label.replace('{jour}', formatDayLong(d))}</h2>
+                  <h2 className="font-display text-[19px] leading-tight font-semibold">{label.replace('{jour}', formatDayLong(d))}</h2>
                   {r.length ? (
-                    <p className="text-[15px] text-muted mt-1">{t.invAlready} : {r.map(([k, v]) => `${k.toLowerCase()} ${v}`).join(' · ')}</p>
-                  ) : <p className="text-[15px] text-muted mt-1">{t.invNothing}</p>}
+                    <p className="text-[15px] text-c-muted mt-1">{t.invAlready} : {r.map(([k, v]) => `${k.toLowerCase()} ${v}`).join(' · ')}</p>
+                  ) : <p className="text-[15px] text-c-muted mt-1">{t.invNothing}</p>}
                 </Card>
               );
             })}
@@ -115,8 +115,8 @@ export function InvestigationPage() {
         {step && (
           <>
             <Pepite mood="detective" size="sm" tappable={false} />
-            <p className="font-bold text-sauge-fort">{step.dayLabel}</p>
-            <h1 className="text-2xl font-extrabold">{step.screen.title.replace('aujourd’hui', 'ce jour-là').replace('Ta nuit dernière', 'La nuit d’avant')}</h1>
+            <p className="font-bold text-c-accent">{step.dayLabel}</p>
+            <h1 className="font-display text-[28px] leading-tight font-semibold">{step.screen.title.replace('aujourd’hui', 'ce jour-là').replace('Ta nuit dernière', 'La nuit d’avant')}</h1>
             {step.screen.parts.map((p) => (
               <PartInput key={p.field} part={p} entry={entries[step.day]} settings={settings} onChange={async (patch) => {
                 setEntries((e) => ({ ...e!, [step.day]: { ...e![step.day], ...patch } }));
@@ -127,9 +127,9 @@ export function InvestigationPage() {
         )}
         {isSuspect && (
           <>
-            <h1 className="text-2xl font-extrabold">{t.invSuspectTitle}</h1>
+            <h1 className="font-display text-[28px] leading-tight font-semibold">{t.invSuspectTitle}</h1>
             <textarea value={suspect} onChange={(e) => setSuspect(e.target.value)} placeholder={t.invSuspectPlaceholder} rows={4}
-              className="w-full rounded-2xl border-2 border-line bg-surface p-4 text-[16px] outline-none focus:border-sauge-fort" />
+              className="field w-full" />
           </>
         )}
       </section>

@@ -11,14 +11,17 @@ import { formatMonth, weekdayMon0 } from '../../lib/dates';
 import { compare, type CoreStats } from '../../lib/recap';
 import { markRecapSeen, useRecaps } from '../../lib/useInsights';
 import { Pepite } from '../../mascot/Pepite';
+import { tiers } from '../../lib/goals';
+import { GrowthStage } from '../../ui/Garden';
 import { statusClass } from '../calendar/CalendarPage';
 
 const t = copy.recap;
+const tierStage = (label: string) => tiers.find((x) => x.label === label)?.id;
 const num = (x: number | null) => (x === null ? '—' : String(x).replace('.', ','));
 
 function Cmp({ now, base, label }: { now: number | null; base: number | null | undefined; label: string }) {
   const c = base === undefined ? null : compare(now, base);
-  return <span className="block text-xs text-muted">{c ? `${t.cmp[c]} ${label}` : ''}</span>;
+  return <span className="block text-xs text-c-muted">{c ? `${t.cmp[c]} ${label}` : ''}</span>;
 }
 
 export function MonthRecapPage() {
@@ -54,17 +57,17 @@ export function MonthRecapPage() {
 
       <div className="grid grid-cols-2 gap-3">
         <Card className="!p-4">
-          <p className="text-sm font-bold text-muted">{t.filled}</p>
-          <p className="text-2xl font-extrabold">{d.core.filledDays}</p>
+          <p className="text-sm font-bold text-c-muted">{t.filled}</p>
+          <p className="font-display text-[26px] leading-none font-semibold mt-1">{d.core.filledDays}</p>
         </Card>
         <Card className="!p-4">
-          <p className="text-sm font-bold text-muted">{t.tier}</p>
-          <p className="text-2xl font-extrabold">{d.tier ? `${d.tier.emoji} ${d.tier.label}` : '—'}</p>
+          <p className="text-sm font-bold text-c-muted">{t.tier}</p>
+          <p className="font-display text-[22px] font-semibold flex items-center gap-2">{d.tier ? <>{tierStage(d.tier.label) && <GrowthStage stage={tierStage(d.tier.label)!} size={32} />}{d.tier.label}</> : '—'}</p>
         </Card>
         {stats.map((s) => (
           <Card key={s.key} className="!p-4">
-            <p className="text-sm font-bold text-muted leading-tight">{s.label}</p>
-            <p className="text-2xl font-extrabold">{s.fmt(d.core[s.key])}</p>
+            <p className="text-sm font-bold text-c-muted leading-tight">{s.label}</p>
+            <p className="font-display text-[26px] leading-none font-semibold mt-1">{s.fmt(d.core[s.key])}</p>
             <Cmp now={d.core[s.key]} base={d.prev ? d.prev[s.key] : undefined} label={t.vsPrev} />
             <Cmp now={d.core[s.key]} base={d.avg3 ? d.avg3[s.key] : undefined} label={t.vs3} />
           </Card>
@@ -74,35 +77,35 @@ export function MonthRecapPage() {
       <Card className="space-y-3">
         {lists.map(([title, items]) => (
           <div key={title}>
-            <h2 className="font-extrabold">{title}</h2>
-            <p className="text-[15px]">{items.length ? items.join(' · ') : <span className="text-muted">{t.noneNoted}</span>}</p>
+            <h2 className="font-display text-[19px] leading-tight font-semibold">{title}</h2>
+            <p className="text-[15px]">{items.length ? items.join(' · ') : <span className="text-c-muted">{t.noneNoted}</span>}</p>
           </div>
         ))}
         <div>
-          <h2 className="font-extrabold">{t.meds}</h2>
+          <h2 className="font-display text-[19px] leading-tight font-semibold">{t.meds}</h2>
           <p className="text-[15px]">
             {d.medDaysByCategory.length
               ? d.medDaysByCategory.map((m) => `${medicationCategories.find((c) => c.value === m.category)?.label ?? m.category} : ${m.days} j`).join(' · ')
-              : <span className="text-muted">{t.noneNoted}</span>}
+              : <span className="text-c-muted">{t.noneNoted}</span>}
           </p>
         </div>
       </Card>
 
       <Card>
-        <h2 className="font-extrabold mb-3">{t.calendar}</h2>
+        <h2 className="font-display text-[19px] leading-tight font-semibold mb-3">{t.calendar}</h2>
         <div className="grid grid-cols-7 gap-1 text-center text-xs">
-          {copy.calendar.weekdays.map((w, i) => <div key={i} className="font-bold text-muted" aria-hidden>{w}</div>)}
+          {copy.calendar.weekdays.map((w, i) => <div key={i} className="font-bold text-c-muted" aria-hidden>{w}</div>)}
           {Array.from({ length: offset }, (_, i) => <div key={`o${i}`} />)}
           {d.calendar.map((c) => (
-            <div key={c.date} className={`aspect-square rounded-lg border-2 grid place-items-center font-bold ${statusClass({ kind: c.kind, intensity: c.intensity } as DayStatus)}`}>
+            <div key={c.date} className={`aspect-square rounded-2xl border-2 grid place-items-center font-bold ${statusClass({ kind: c.kind, intensity: c.intensity } as DayStatus)}`}>
               {Number(c.date.slice(8))}
             </div>
           ))}
         </div>
       </Card>
 
-      <Card tone="bg-peche/40">
-        <h2 className="font-extrabold">{t.victoryTitle}</h2>
+      <Card tone="grad-peach">
+        <h2 className="font-display text-[19px] leading-tight font-semibold">{t.victoryTitle}</h2>
         <p className="mt-1">{t.victory[d.victory.key].replace('{n}', String(d.victory.n))}</p>
       </Card>
 
@@ -110,7 +113,7 @@ export function MonthRecapPage() {
         const { recapPdf } = await import('../../lib/pdf');
         await shareOrDownload([{ name: `nuage-recap-${month}.pdf`, blob: recapPdf(d, settings?.firstName ?? '') }], t.title.replace('{mois}', formatMonth(month)));
       }}>{copy.data.recapPdf}</Button>
-      <p className="text-sm text-muted text-center">{t.disclaimer}</p>
+      <p className="text-sm text-c-muted text-center">{t.disclaimer}</p>
     </main>
   );
 }

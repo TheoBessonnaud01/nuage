@@ -135,6 +135,8 @@ Ouvre l'adresse affichée (http://localhost:5173). Pour arrêter : **Ctrl + C**.
 
 **Planche de Pépite** (tous ses états, en clair et en sombre) : http://localhost:5173/#/mascot-preview
 
+**Navigation** : barre flottante en bas (Accueil, Journal, Évolution, Comprendre) et bouton central **+** (point du jour, migraine, traitement, rattrapage — ou les actions de crise pendant une crise). Les réglages sont accessibles par l'icône en haut à droite de l'accueil.
+
 **Lancer les tests** (71 tests pour l'app, 10 pour le serveur) :
 
 ```bash
@@ -237,10 +239,21 @@ Tout est rassemblé pour être modifiable sans toucher au reste du code (dans `a
 | Répliques de Pépite (≥ 8 par situation) | `mascot/lines.ts` |
 | Expressions de Pépite (combinaison des calques) | `mascot/moods.ts` |
 | Dessins de Pépite, un fichier SVG par calque | `mascot/parts/` |
-| Couleurs de l'app et de Pépite (clair, sombre, mode crise) | `index.css` (variables en haut du fichier) |
+| Couleurs de l'app (direction « Aube » : clair, sombre, mode crise), dégradés des cartes | `design.css` (jetons `--c-…` et `--g-…`) |
+| Couleurs atténuées de Pépite (câlin, mode crise) | `index.css`, section « Pépite » |
+| Icônes dessinées (navigation, cartes…) | `ui/Icon.tsx` |
+| Illustrations du jardin (graine → floraison) et visages de ressenti | `ui/Garden.tsx` |
+| Composants visuels (cartes, boutons, navigation du bas…) | `components/ui.tsx`, `components/AppNav.tsx`, `ui/kit.tsx` |
+| Typographies (Fraunces pour les titres, Plus Jakarta Sans pour le texte) | `main.tsx` (imports) et `tailwind.config.js` |
 | Messages des notifications | `worker/src/messages.ts` (puis `npx wrangler deploy`) |
 
-**Redessiner Pépite.** Un illustrateur peut remplacer les fichiers de `mascot/parts/` (même cadre 200 × 215, mêmes noms de fichiers). Pour regénérer ensuite les icônes de l'app :
+**Redessiner Pépite.** Pépite est dessiné en volume (dégradés, sans contours) par le script `scripts/gen-mascot-parts.py`, qui écrit un fichier SVG par calque dans `mascot/parts/` (+ les dégradés partagés dans `mascot/parts/_defs/`). On peut modifier le script puis relancer :
+
+```bash
+python3 scripts/gen-mascot-parts.py src/mascot/parts
+```
+
+Un illustrateur peut aussi remplacer directement les fichiers de `mascot/parts/` (même cadre 200 × 215, mêmes noms). Pour voir un rendu haute définition sans lancer l'app : `node scripts/render-mascot.mjs src/mascot/parts apercu.png '[["tail/up","body/sit","arms/down","head/base","eyes/open","mouth/smile"]]'`. Pour regénérer ensuite les icônes de l'app :
 
 ```bash
 npm run icons

@@ -2,78 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Couleurs en triplets RGB pour pouvoir utiliser l'opacité Tailwind (bg-sauge/50). */
-:root {
-  --bg: 247 243 236;        /* sable très clair */
-  --surface: 255 253 249;
-  --ink: 52 58 64;
-  --muted: 92 98 102;
-  --line: 224 218 206;
-  --sauge: 143 169 143;
-  --sauge-fort: 84 112 86;
-  --sable: 230 214 186;
-  --lavande: 197 186 224;
-  --ciel: 196 222 238;
-  --peche: 244 196 170;
-  color-scheme: light;
-}
+/* Les couleurs sont définies dans design.css (jetons --c-*, direction « Aube »). */
+:root { color-scheme: light; }
+:root[data-theme='sombre'], :root[data-crisis='on'] { color-scheme: dark; }
 
-:root[data-theme='sombre'] {
-  --bg: 30 33 36;
-  --surface: 41 45 49;
-  --ink: 226 228 224;
-  --muted: 182 187 185;
-  --line: 62 67 71;
-  --sauge: 118 146 120;
-  --sauge-fort: 168 196 168;
-  --sable: 120 106 84;
-  --lavande: 100 90 138;
-  --ciel: 82 110 128;
-  --peche: 150 112 96;
-  color-scheme: dark;
-}
-
-/* Mode crise : sombre atténué, contrastes doux, aucune animation. */
-:root[data-crisis='on'] {
-  --bg: 24 25 28;
-  --surface: 33 35 38;
-  --ink: 196 196 192;
-  --muted: 168 170 168;
-  --line: 50 52 55;
-  --sauge: 96 116 98;
-  --sauge-fort: 150 170 150;
-  --sable: 74 66 54;
-  --lavande: 72 66 98;
-  --ciel: 50 68 80;
-  --peche: 92 72 62;
-  color-scheme: dark;
-}
+/* Mode crise : aucune animation. */
 :root[data-crisis='on'] *, :root[data-crisis='on'] *::before, :root[data-crisis='on'] *::after {
   animation: none !important;
   transition: none !important;
 }
 
-/* Échelle générale : 15 px = 1rem (tout ce qui est en rem rétrécit un peu). Texte courant gardé à 16 px. */
+/* Échelle générale : 15 px = 1rem. Texte courant gardé à 16 px. */
 html { font-size: 15px; }
 html, body, #root { min-height: 100%; }
 
 /* Hauteur réellement visible (iOS : sans la barre d'adresse ni l'encoche). */
 .screen-h { min-height: calc(100dvh - env(safe-area-inset-top)); }
-/* Espace en bas des pages sans barre d'action. */
-main { padding-bottom: calc(1.5rem + env(safe-area-inset-bottom)) !important; }
+/* Espace en bas des pages : barre de navigation flottante (--nav-space) + zone de geste. */
+main { padding-bottom: calc(1.5rem + var(--nav-space, 0px) + env(safe-area-inset-bottom)) !important; }
 body {
-  @apply bg-bg text-ink font-sans antialiased;
+  @apply text-c-ink font-text antialiased;
   font-size: 16px;
   -webkit-tap-highlight-color: transparent;
-  /* Encoche et barre du bas iPhone : le haut ici, le bas sur les barres d'action collées en bas. */
+  overscroll-behavior-y: none;
+  /* Encoche et barre du bas : le haut ici, le bas sur les barres collées en bas. */
   padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
 }
+body { background-color: rgb(var(--c-bg)); }
+#root { background:
+  radial-gradient(70% 38% at 100% 0%, rgb(var(--c-glow-1) / .5), transparent 70%),
+  radial-gradient(60% 32% at 0% 22%, rgb(var(--c-glow-2) / .42), transparent 70%); min-height: 100dvh; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
-:focus-visible { outline: 3px solid rgb(var(--sauge-fort)); outline-offset: 2px; border-radius: 6px; }
+:focus-visible { outline: 3px solid rgb(var(--c-accent)); outline-offset: 2px; border-radius: 10px; }
 
 /* ---------- Pépite ---------- */
 .pp {
@@ -101,8 +65,6 @@ body {
 @keyframes pp-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.018, 1.025); } }
 @keyframes pp-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-12deg); } 75% { transform: rotate(10deg); } }
 
-.pp-panel-clair { background: #F7F3EC; }
-.pp-panel-sombre { background: #1E2124; }
 
 .bubble-in { animation: bubble-in 0.28s ease-out; transform-origin: 0 50%; }
 @keyframes bubble-in { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }

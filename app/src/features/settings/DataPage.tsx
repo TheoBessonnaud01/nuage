@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
-import { Button, Card, PageHeader } from '../../components/ui';
-import { Chip } from '../../components/inputs';
+import { Button, Card, PageHeader, Segmented } from '../../components/ui';
 import { copy } from '../../content/copy';
 import { updateSettings } from '../../db/db';
 import { BackupError, createBackup, parseBackup, restoreBackup, summarize, wipeAll, type Backup } from '../../lib/backup';
@@ -82,62 +81,60 @@ export function DataPage() {
   return (
     <main className="mx-auto max-w-md px-4 py-6 space-y-4">
       <PageHeader title={t.title} backTo="/reglages" />
-      <p className="text-muted">{t.intro}</p>
+      <p className="text-c-muted">{t.intro}</p>
 
       <Card className="space-y-3">
-        <h2 className="font-extrabold">{t.doctorTitle}</h2>
-        <p className="text-[15px] text-muted">{t.doctorBody}</p>
-        <div className="flex gap-2" role="radiogroup" aria-label={t.period}>
-          {t.periods.map((x) => <Chip key={x.months} selected={months === x.months} onClick={() => setMonths(x.months)} className="flex-1 justify-center">{x.label}</Chip>)}
-        </div>
+        <h2 className="font-display text-[19px] leading-tight font-semibold">{t.doctorTitle}</h2>
+        <p className="text-[15px] text-c-muted">{t.doctorBody}</p>
+        <Segmented label={t.period} value={months} onChange={setMonths} options={t.periods.map((x) => ({ value: x.months, label: x.label }))} />
         <Button onClick={doctor} disabled={!!busy}>{busy === 'pdf' ? t.working : t.makePdf}</Button>
         {msg.pdf && <p role="status">{msg.pdf}</p>}
       </Card>
 
       <Card className="space-y-3">
-        <h2 className="font-extrabold">{t.csvTitle}</h2>
-        <p className="text-[15px] text-muted">{t.csvBody}</p>
+        <h2 className="font-display text-[19px] leading-tight font-semibold">{t.csvTitle}</h2>
+        <p className="text-[15px] text-c-muted">{t.csvBody}</p>
         <Button variant="secondary" onClick={csv} disabled={!!busy}>{busy === 'csv' ? t.working : t.makeCsv}</Button>
         {msg.csv && <p role="status">{msg.csv}</p>}
       </Card>
 
       <Card className="space-y-3">
-        <h2 className="font-extrabold">{t.backupTitle}</h2>
-        <p className="text-[15px] text-muted">{t.backupBody}</p>
+        <h2 className="font-display text-[19px] leading-tight font-semibold">{t.backupTitle}</h2>
+        <p className="text-[15px] text-c-muted">{t.backupBody}</p>
         <p className="text-sm font-bold">{lastBackup}</p>
         <Button onClick={backup} disabled={!!busy}>{busy === 'backup' ? t.working : t.makeBackup}</Button>
         {msg.backup && <p role="status">{msg.backup}</p>}
       </Card>
 
       <Card className="space-y-3">
-        <h2 className="font-extrabold">{t.restoreTitle}</h2>
-        <p className="text-[15px] text-muted">{t.restoreBody}</p>
+        <h2 className="font-display text-[19px] leading-tight font-semibold">{t.restoreTitle}</h2>
+        <p className="text-[15px] text-c-muted">{t.restoreBody}</p>
         <input ref={fileRef} type="file" accept="application/json,.json" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) pick(f); e.target.value = ''; }} />
         {!pending && <Button variant="ghost" onClick={() => fileRef.current?.click()}>{t.chooseFile}</Button>}
         {p && (
           <div className="space-y-3">
             <p className="font-bold">{t.restorePreview.replace('{date}', p.exportedAt ? formatDayLong(localDay(new Date(p.exportedAt))) : '?').replace('{jours}', String(p.days)).replace('{crises}', String(p.attacks)).replace('{traitements}', String(p.medications))}</p>
             <Button onClick={() => restore('fusion')} disabled={!!busy}>{t.merge}</Button>
-            <p className="text-sm text-muted -mt-1">{t.mergeHelp}</p>
+            <p className="text-sm text-c-muted -mt-1">{t.mergeHelp}</p>
             {confirmReplace
               ? <Button variant="secondary" onClick={() => restore('remplacement')} disabled={!!busy}>{t.replaceConfirm}</Button>
               : <Button variant="ghost" onClick={() => setConfirmReplace(true)}>{t.replace}</Button>}
-            <p className="text-sm text-muted -mt-1">{t.replaceHelp}</p>
-            <button type="button" onClick={() => { setPending(null); setConfirmReplace(false); }} className="w-full min-h-touch underline text-muted">{t.cancel}</button>
+            <p className="text-sm text-c-muted -mt-1">{t.replaceHelp}</p>
+            <button type="button" onClick={() => { setPending(null); setConfirmReplace(false); }} className="w-full min-h-touch underline text-c-muted">{t.cancel}</button>
           </div>
         )}
         {msg.restore && <p role="status">{msg.restore}</p>}
       </Card>
 
-      <Card className="space-y-3 border-ink/30">
-        <h2 className="font-extrabold">{t.wipeTitle}</h2>
-        <p className="text-[15px] text-muted">{t.wipeBody}</p>
+      <Card className="space-y-3 border-c-ink/30">
+        <h2 className="font-display text-[19px] leading-tight font-semibold">{t.wipeTitle}</h2>
+        <p className="text-[15px] text-c-muted">{t.wipeBody}</p>
         {wipeStep === 0 && <Button variant="ghost" onClick={() => setWipeStep(1)}>{t.wipe}</Button>}
         {wipeStep === 1 && (
           <>
             <p className="font-bold">{t.wipeConfirm1}</p>
-            <Button variant="ghost" onClick={wipe} className="border-ink">{t.wipeConfirm2}</Button>
-            <button type="button" onClick={() => setWipeStep(0)} className="w-full min-h-touch underline text-muted">{t.cancel}</button>
+            <Button variant="ghost" onClick={wipe} className="border-c-ink">{t.wipeConfirm2}</Button>
+            <button type="button" onClick={() => setWipeStep(0)} className="w-full min-h-touch underline text-c-muted">{t.cancel}</button>
           </>
         )}
       </Card>

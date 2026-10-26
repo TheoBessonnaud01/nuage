@@ -53,7 +53,7 @@ export function MedicationPage() {
   if (saved) {
     return (
       <main className="mx-auto max-w-md px-4 py-10">
-        <Card tone="bg-sauge/30"><p className="text-xl font-extrabold">{saved}</p></Card>
+        <Card tone="grad-mint"><p className="text-xl font-extrabold">{saved}</p></Card>
       </main>
     );
   }
@@ -67,26 +67,26 @@ export function MedicationPage() {
           <div className="grid gap-2">
             {catalog.map((d) => (
               <Chip key={d.name} selected={!adding && chosen?.name === d.name} onClick={() => { setChosen(d); setAdding(false); }}>
-                {d.name} <span className="text-muted font-normal text-sm">· {d.category}</span>
+                {d.name} <span className="text-c-muted font-normal text-sm">· {d.category}</span>
               </Chip>
             ))}
-            {!adding && <button type="button" onClick={() => { setAdding(true); setChosen(null); }} className="text-left font-bold underline text-sauge-fort min-h-touch">{t.medAdd}</button>}
+            {!adding && <button type="button" onClick={() => { setAdding(true); setChosen(null); }} className="text-left font-bold underline text-c-accent min-h-touch">{t.medAdd}</button>}
           </div>
         )}
 
         {showForm && (
           <Card className="space-y-3">
-            {catalog.length === 0 && <p className="text-muted">{t.medEmpty}</p>}
+            {catalog.length === 0 && <p className="text-c-muted">{t.medEmpty}</p>}
             <label className="block">
               <span className="font-bold">{t.medName}</span>
-              <input value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full min-h-touch rounded-xl border-2 border-line bg-surface px-3 text-[16px]" />
+              <input value={name} onChange={(e) => setName(e.target.value)} className="field mt-1 w-full" />
             </label>
             <div>
               <p className="font-bold mb-2">{t.medCategory}</p>
               <div className="grid gap-2">
                 {medicationCategories.map((c) => (
                   <Chip key={c.value} selected={category === c.value} onClick={() => setCategory(c.value)}>
-                    {c.label} {c.help && <span className="text-muted font-normal text-sm">({c.help})</span>}
+                    {c.label} {c.help && <span className="text-c-muted font-normal text-sm">({c.help})</span>}
                   </Chip>
                 ))}
               </div>
@@ -95,10 +95,10 @@ export function MedicationPage() {
         )}
 
         <div>
-          <h2 className="font-bold text-muted mb-2">{t.medWhen}</h2>
+          <h2 className="font-bold text-c-muted mb-2">{t.medWhen}</h2>
           <WhenPicker value={takenAt} onChange={setTakenAt} />
         </div>
-        <p className="text-sm text-muted">{t.medDisclaimer}</p>
+        <p className="text-sm text-c-muted">{t.medDisclaimer}</p>
       </div>
       <ActionBar>
         <Button onClick={save} disabled={showForm ? !name.trim() : !chosen}>{t.medSave}</Button>

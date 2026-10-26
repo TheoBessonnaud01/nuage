@@ -1,149 +1,260 @@
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { copy, withName } from '../../content/copy';
-import { Button, Card } from '../../components/ui';
+import { infoCards } from '../../content/infoCards';
+import { Card } from '../../components/ui';
 import { db } from '../../db/db';
-import { localDay, localHour } from '../../lib/dates';
-import { useSettings } from '../../lib/useSettings';
-import { useGoals } from '../../lib/useGoals';
-import { useActiveAttack } from '../../lib/useAttack';
 import { attackDayNumber } from '../../lib/attacks';
-import { MedFollowUp } from '../crisis/MedFollowUp';
-import { useRecaps } from '../../lib/useInsights';
+import { dayStatus, type DayStatus } from '../../lib/calendar';
+import { addDays, diffDays, formatDayLong, localDay, localHour, weekStart } from '../../lib/dates';
+import { unlockProgress } from '../../lib/insights';
+import { useActiveAttack } from '../../lib/useAttack';
+import { useCalendarData } from '../../lib/useCalendarData';
+import { useGoals } from '../../lib/useGoals';
+import { useInsightsData, useRecaps } from '../../lib/useInsights';
+import { useSettings } from '../../lib/useSettings';
 import { formatMonth } from '../../lib/dates';
-import { PostdromeSlider } from '../crisis/PostdromeSlider';
+import { Mascot } from '../../mascot/Mascot';
 import { getMood, homeLineContext } from '../../mascot/moodEngine';
-import { Pepite } from '../../mascot/Pepite';
+import { pickLine } from '../../mascot/lines';
 import { useMoodContext } from '../../mascot/useMoodContext';
+import { GrowthStage } from '../../ui/Garden';
+import { Icon } from '../../ui/Icon';
+import { Ring } from '../../ui/kit';
+import { MedFollowUp } from '../crisis/MedFollowUp';
+import { PostdromeSlider } from '../crisis/PostdromeSlider';
 
-const navItems = [
-  { to: '/calendrier', label: copy.home.nav.calendar, icon: '🗓️' },
-  { to: '/mois', label: copy.home.nav.months, icon: '📈' },
-  { to: '/analyses', label: copy.home.nav.insights, icon: '🔎' },
-  { to: '/comprendre', label: copy.home.nav.info, icon: '📖' },
-  { to: '/reglages', label: copy.home.nav.settings, icon: '⚙️' },
-];
+const t = copy.home;
 
 function greeting(hour: number) {
-  if (hour < 12) return copy.home.greetingMorning;
-  if (hour < 18) return copy.home.greetingAfternoon;
-  return copy.home.greetingEvening;
+  if (hour < 12) return t.greetingMorning;
+  if (hour < 18) return t.greetingAfternoon;
+  return t.greetingEvening;
+}
+
+/** Pastille d'un jour de la semaine (jardin). */
+function DayDot({ s, today }: { s: DayStatus; today: boolean }) {
+  const base = 'mx-auto grid place-items-center w-9 h-9 rounded-full';
+  if (s.kind === 'crise') return <span className={`${base} grad-lilac text-c-on-grad`}><Icon name="rain" size={16} /></span>;
+  if (s.kind === 'post-crise') return <span className={`${base} grad-sky text-c-on-grad`}><Icon name="heart" size={15} /></span>;
+  if (s.kind === 'rempli' || s.kind === 'signaux') return <span className={`${base} grad-mint text-c-on-grad`}><Icon name="leaf" size={16} /></span>;
+  if (today) return <span className={`${base} ring-2 ring-c-accent bg-c-surface`} />;
+  if (s.kind === 'futur') return <span className={`${base} bg-c-ink/5`} />;
+  return <span className={`${base} border-2 border-dashed border-c-ink/15`} />;
 }
 
 export function HomePage() {
   const ctx = useMoodContext();
   const settings = useSettings();
-  const mascotHidden = settings?.mascotMode === 'masqué';
   const goalsInfo = useGoals();
+  const cal = useCalendarData();
+  const insights = useInsightsData();
   const unseenRecap = useRecaps()?.find((r) => !r.seen);
+  const active = useActiveAttack();
   const firstDay = useLiveQuery(async () => (await db.days.orderBy('date').first())?.date, []);
+  const todayEntry = useLiveQuery(async () => (await db.days.get(localDay())) ?? null, []);
+  const today = localDay();
+
+  const mode = settings?.mascotMode ?? 'normal';
+  const name = settings?.firstName ?? '';
+  const mood = ctx ? getMood(ctx) : 'joyeux';
+  const lineCtx = ctx ? homeLineContext(ctx) : null;
+  const [line, setLine] = useState<string | null>(null);
+  useEffect(() => { if (lineCtx && name) setLine(pickLine(lineCtx, name)); }, [lineCtx, name]);
+
+  const inCrisis = active?.attack.status === 'en cours';
+  const inPost = active?.attack.status === 'post-crise';
+  const g = goalsInfo?.goals;
   const needBackup = (() => {
     const monthAgo = Date.now() - 30 * 86400000;
     if (settings?.lastBackupAt) return new Date(settings.lastBackupAt).getTime() < monthAgo;
     return !!firstDay && new Date(`${firstDay}T12:00:00Z`).getTime() < monthAgo;
   })();
-  const active = useActiveAttack();
-  const inCrisis = active?.attack.status === 'en cours';
-  const inPost = active?.attack.status === 'post-crise';
-  const g = goalsInfo?.goals;
-  const todayDone = useLiveQuery(async () => !!(await db.days.get(localDay())), [], false);
+  const week = useMemo(() => Array.from({ length: 7 }, (_, i) => addDays(weekStart(today), i)), [today]);
+  const recent = useMemo(() => Array.from({ length: 21 }, (_, i) => addDays(today, i - 20)), [today]);
+  const lock = insights ? unlockProgress(insights.data) : null;
+  const card = infoCards[Math.abs(diffDays('2026-01-01', today)) % infoCards.length];
+
+  const mascot = (m: typeof mood, size: number, tap = true) => (mode === 'masqué' ? null : (
+    <Mascot mood={m} size={mode === 'discret' ? Math.round(size * .7) : size} animated={!inCrisis}
+      onTap={tap && !inCrisis && name ? () => setLine(pickLine('tap', name)) : undefined} />
+  ));
 
   return (
-    <main className="mx-auto max-w-md px-4 py-6 space-y-5">
-      {mascotHidden
-        ? <h1 className="text-3xl font-extrabold">{withName(greeting(localHour()), settings?.firstName ?? '')}</h1>
-        : <h1 className="sr-only">{copy.home.title}</h1>}
-      {ctx && !mascotHidden && (
-        <Pepite
-          mood={getMood(ctx)}
-          lineContext={homeLineContext(ctx)}
-          size="md"
-          importantBubble
-          animated={ctx.attackStatus !== 'en cours'}
-          tappable={ctx.attackStatus !== 'en cours'}
-        />
+    <main className="mx-auto max-w-md px-4 pt-5 space-y-4">
+      <header className="flex items-center gap-3">
+        {mode !== 'masqué' && (
+          <span className="grid place-items-center w-12 h-12 rounded-full bg-c-surface shadow-soft overflow-hidden shrink-0">
+            <Mascot mood={inCrisis ? 'calin' : 'joyeux'} portrait size={44} animated={false} />
+          </span>
+        )}
+        <div className="flex-1 min-w-0">
+          <p className="text-[13px] font-semibold text-c-muted first-letter:uppercase">{formatDayLong(today)}</p>
+          <h1 className="font-display text-[26px] leading-tight font-semibold truncate">{withName(greeting(localHour()), name)}</h1>
+        </div>
+        <Link to="/reglages" aria-label={copy.settings.title} className="press grid place-items-center w-11 h-11 rounded-full glass shadow-soft text-c-ink">
+          <Icon name="settings" />
+        </Link>
+      </header>
+
+      {line && mode !== 'masqué' && (
+        <p className="bubble-in glass shadow-soft rounded-[22px] rounded-tl-md px-4 py-3 text-[15px] font-semibold" aria-live="polite">{line}</p>
       )}
 
+      {/* ---------- Carte principale, selon la situation ---------- */}
       {inCrisis && active && (
-        <>
-          <Link to="/crise" className="block">
-            <Card tone="bg-lavande/40">
-              <h2 className="text-xl font-extrabold">{copy.home.crisisCardTitle.replace('{n}', String(attackDayNumber(active.attack)))}</h2>
-              <p className="mt-1">{copy.home.crisisCardBody}</p>
-            </Card>
-          </Link>
-          <MedFollowUp />
-          <Link to="/crise/fin" className="block"><Button variant="secondary" tabIndex={-1}>{copy.crisis.painGone}</Button></Link>
-          <Link to="/crise/traitement" className="block"><Button variant="ghost" tabIndex={-1}>{copy.crisis.tookMed}</Button></Link>
-        </>
+        <Link to="/crise" className="press block">
+          <Card tone="grad-night" className="!p-0 min-h-[190px] overflow-hidden">
+            <div className="relative z-10 p-5 w-[64%] space-y-2 text-white">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[12px] font-bold"><Icon name="moon" size={14} />{t.crisisChip}</span>
+              <h2 className="font-display text-[25px] leading-[1.1] font-semibold">{t.crisisCardTitle.replace('{n}', String(attackDayNumber(active.attack)))}</h2>
+              <p className="text-[14px] font-medium opacity-90">{t.crisisCardBody}</p>
+            </div>
+            <div className="absolute -right-2 -bottom-3">{mascot('calin', 150, false)}</div>
+          </Card>
+        </Link>
       )}
 
       {inPost && active && (
-        <>
-          <Card tone="bg-ciel/50">
-            <h2 className="text-xl font-extrabold mb-1">
-              <Link to="/crise">{copy.home.postCardTitle}</Link>
-            </h2>
-            <PostdromeSlider attackId={active.attack.id} showTitle={false} />
-          </Card>
-          <MedFollowUp />
-        </>
+        <Card tone="grad-sky" className="space-y-1">
+          <Link to="/crise" className="block font-display text-[22px] leading-tight font-semibold">{t.postCardTitle}</Link>
+          <PostdromeSlider attackId={active.attack.id} showTitle={false} />
+        </Card>
       )}
 
-      {!inCrisis && (
-        <Link to="/checkin" className="block">
-          <Card tone="bg-sauge/30">
-            <h2 className="text-xl font-extrabold">{copy.home.dailyCardTitle}</h2>
-            <p className="mt-1">{todayDone ? copy.home.dailyCardDone : copy.home.dailyCardTodo}</p>
+      {!active && (
+        todayEntry ? (
+          <Card tone="grad-mint" className="!p-0 min-h-[170px] overflow-hidden">
+            <div className="relative z-10 p-5 w-[62%] space-y-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-c-surface/60 px-3 py-1 text-[12px] font-bold"><Icon name="check" size={14} strokeWidth={2.4} />{t.doneChip}</span>
+              <h2 className="font-display text-[24px] leading-[1.1] font-semibold">{t.dailyCardDone}</h2>
+              <Link to="/checkin" className="inline-flex items-center gap-1 min-h-[44px] font-bold underline underline-offset-4">{t.edit}</Link>
+            </div>
+            <div className="absolute -right-2 -bottom-3">{mascot(mood, 140)}</div>
+          </Card>
+        ) : (
+          <Card tone="grad-hero" className="!p-0 min-h-[210px] overflow-hidden shadow-float">
+            <div className="relative z-10 p-5 w-[62%] space-y-3">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-c-surface/60 px-3 py-1 text-[12px] font-bold"><Icon name="clock" size={14} />{t.oneMinute}</span>
+              <h2 className="font-display text-[26px] leading-[1.08] font-semibold">{localHour() >= 17 ? t.heroEvening : t.heroDay}</h2>
+              <Link to="/checkin" className="press inline-flex items-center gap-2 min-h-[48px] rounded-full bg-c-primary text-c-on-primary px-5 font-bold shadow-float">
+                {t.start}<Icon name="arrow-right" size={19} />
+              </Link>
+            </div>
+            <div className="absolute -right-3 -bottom-4">{mascot(mood, 168)}</div>
+          </Card>
+        )
+      )}
+
+      <MedFollowUp />
+
+      {!inCrisis && goalsInfo?.pendingCelebration && g && (
+        <Link to="/palier" className="press block">
+          <Card tone="grad-sun" className="!p-4 flex items-center gap-3">
+            <GrowthStage stage={g.tier.id} size={52} />
+            <p className="flex-1 font-bold">{copy.goals.banner}</p>
+            <Icon name="chevron-right" />
           </Card>
         </Link>
       )}
 
-      {goalsInfo?.pendingCelebration && (
-        <Link to="/palier" className="block">
-          <Card tone="bg-peche/50"><p className="font-extrabold">{copy.goals.banner}</p></Card>
+      {!inCrisis && unseenRecap && (
+        <Link to={`/mois/${unseenRecap.month}`} className="press block">
+          <Card tone="grad-peach" className="!p-4 flex items-center gap-3">
+            <span className="grid place-items-center w-12 h-12 rounded-2xl bg-c-surface/70"><Icon name="sparkle" /></span>
+            <p className="flex-1 font-bold">{copy.months.banner.replace('{mois}', formatMonth(unseenRecap.month).split(' ')[0])}</p>
+            <Icon name="chevron-right" />
+          </Card>
         </Link>
       )}
 
-      {unseenRecap && (
-        <Link to={`/mois/${unseenRecap.month}`} className="block">
-          <Card tone="bg-peche/40"><p className="font-extrabold">{copy.months.banner.replace('{mois}', formatMonth(unseenRecap.month).split(' ')[0])}</p></Card>
+      {/* ---------- Jardin de la semaine ---------- */}
+      {g && cal && (
+        <Link to="/objectifs" className="press block">
+          <Card className="!p-4">
+            <div className="flex items-center gap-3">
+              <GrowthStage stage={g.tier.id} size={56} />
+              <div className="flex-1 min-w-0">
+                <p className="text-[13px] font-bold text-c-muted">{t.garden.replace('{palier}', g.tier.label)}</p>
+                <p className="font-display text-[19px] leading-tight font-semibold">
+                  {g.thisWeekTarget === null ? t.freeRhythm : t.weekProgress.replace('{n}', String(g.thisWeekCount)).replace('{target}', String(g.thisWeekTarget))}
+                </p>
+              </div>
+              {g.thisWeekTarget !== null && (
+                <Ring value={g.thisWeekCount / g.thisWeekTarget}><span className="text-[13px] font-bold">{g.thisWeekCount}/{g.thisWeekTarget}</span></Ring>
+              )}
+            </div>
+            <div className="mt-4 grid grid-cols-7 gap-1 text-center">
+              {week.map((d) => (
+                <div key={d} className="space-y-1.5">
+                  <p className="text-[12px] font-bold text-c-muted">{copy.calendar.weekdays[(new Date(`${d}T12:00:00Z`).getUTCDay() + 6) % 7]}</p>
+                  <DayDot s={dayStatus(d, today, cal)} today={d === today} />
+                </div>
+              ))}
+            </div>
+          </Card>
         </Link>
       )}
 
       {!active && (
-        <Link to="/crise/debut" className="block">
-          <Button variant="secondary" tabIndex={-1}>{copy.home.migraineButton}</Button>
+        <Link to="/crise/debut" className="press block">
+          <Card tone="grad-lilac" className="!p-4 flex items-center gap-4">
+            <span className="grid place-items-center w-12 h-12 rounded-2xl bg-c-surface/70"><Icon name="rain" size={24} /></span>
+            <span className="flex-1">
+              <span className="block font-display text-[19px] font-semibold">{t.migraineTitle}</span>
+              <span className="block text-[13.5px] font-medium text-c-on-grad-muted">{t.migraineHint}</span>
+            </span>
+            <Icon name="chevron-right" />
+          </Card>
         </Link>
       )}
 
-      {g && (
-        <Link to="/objectifs" className="flex items-center justify-between rounded-2xl bg-surface border border-line px-4 min-h-touch py-3">
-          <span className="font-bold">
-            {g.thisWeekTarget === null
-              ? `${g.tier.emoji} ${g.tier.label}`
-              : copy.checkin.weekProgress
-                .replace('{n}', String(g.thisWeekCount))
-                .replace('{target}', String(g.thisWeekTarget))
-                .replace('{emoji}', g.tier.emoji)}
-          </span>
-          <span className="text-muted text-sm">{copy.goals.title} ›</span>
+      <div className="grid grid-cols-2 gap-3">
+        <Link to="/calendrier" className="press block">
+          <Card tone="grad-peach" className="!p-4 space-y-3 h-full">
+            <span className="grid place-items-center w-10 h-10 rounded-2xl bg-c-surface/70"><Icon name="calendar" /></span>
+            <p className="font-display text-[18px] leading-tight font-semibold">{t.calendarCard}</p>
+            {cal && (
+              <div className="grid grid-cols-7 gap-1" aria-hidden>
+                {recent.map((d) => {
+                  const k = dayStatus(d, today, cal).kind;
+                  return <span key={d} className={`aspect-square rounded-full ${k === 'crise' ? 'bg-[#8C78F6]' : k === 'post-crise' ? 'bg-[#7FB8F0]' : k === 'rempli' || k === 'signaux' ? 'bg-c-surface' : 'bg-c-surface/35'}`} />;
+                })}
+              </div>
+            )}
+          </Card>
         </Link>
-      )}
+        <Link to="/analyses" className="press block">
+          <Card tone="grad-mint" className="!p-4 space-y-3 h-full">
+            <span className="grid place-items-center w-10 h-10 rounded-2xl bg-c-surface/70"><Icon name="chart" /></span>
+            <p className="font-display text-[18px] leading-tight font-semibold">{t.insightsCard}</p>
+            <p className="text-[13px] font-semibold text-c-on-grad-muted">
+              {lock && !lock.unlocked
+                ? (lock.missingDays && lock.missingAttacks ? t.insightsLockedBoth : lock.missingDays ? t.insightsLockedDays : t.insightsLockedAttacks)
+                  .replace('{j}', String(lock.missingDays)).replace('{c}', String(lock.missingAttacks))
+                : t.insightsOpen}
+            </p>
+          </Card>
+        </Link>
+      </div>
+
+      <Link to={`/comprendre/${card.id}`} className="press block">
+        <Card className="!p-4 flex items-center gap-4">
+          <span className="grid place-items-center w-12 h-12 rounded-2xl grad-sky text-c-on-grad"><Icon name="book" /></span>
+          <span className="flex-1">
+            <span className="block text-[12.5px] font-bold text-c-muted">{t.learnChip}</span>
+            <span className="block font-display text-[18px] leading-tight font-semibold">{card.titre}</span>
+          </span>
+          <Icon name="chevron-right" className="text-c-muted" />
+        </Card>
+      </Link>
 
       {needBackup && (
-        <Link to="/reglages/donnees" className="block rounded-2xl border border-dashed border-line px-4 py-3 text-[15px] text-muted">
-          {settings?.lastBackupAt ? copy.data.backupBanner : copy.data.backupBannerNever}
+        <Link to="/reglages/donnees" className="press flex items-center gap-3 rounded-[22px] border-2 border-dashed border-c-ink/15 px-4 py-3 text-[14.5px] font-semibold text-c-muted">
+          <Icon name="lock" />{settings?.lastBackupAt ? copy.data.backupBanner : copy.data.backupBannerNever}
         </Link>
       )}
-
-      <nav className="grid grid-cols-2 gap-3 pt-2" aria-label="Menu">
-        {navItems.map((n) => (
-          <Link key={n.to} to={n.to} className="min-h-touch rounded-2xl bg-surface border border-line p-4 font-bold flex items-center gap-2">
-            <span aria-hidden>{n.icon}</span> {n.label}
-          </Link>
-        ))}
-      </nav>
     </main>
   );
 }

@@ -7,7 +7,7 @@ export interface ChoiceOption<V = string | boolean> { value: V; label: string; e
 
 export type Part =
   | { kind: 'hours'; field: 'sleepHours'; label: string }
-  | { kind: 'scale'; field: 'sleepQuality' | 'stress' | 'energy' | 'mood'; label?: string; options: ScaleOption[] }
+  | { kind: 'scale'; field: 'sleepQuality' | 'stress' | 'energy' | 'mood'; label?: string; options: ScaleOption[]; invert?: boolean }
   | { kind: 'choice'; field: keyof DayEntry; label?: string; options: ChoiceOption[] }
   | { kind: 'multi'; field: 'sensoryExposure' | 'warningSigns' | 'customFactors'; label?: string; list: 'sensory' | 'warningSigns' | 'customFactors' }
   | { kind: 'text'; field: 'note'; placeholder: string };
@@ -48,7 +48,7 @@ export const checkinScreens: Screen[] = [
     id: 'stress',
     title: 'Ton niveau de stress aujourd’hui ?',
     parts: [{
-      kind: 'scale', field: 'stress',
+      kind: 'scale', field: 'stress', invert: true,
       options: [
         { value: 1, emoji: '😌', label: 'Zen' },
         { value: 2, emoji: '🙂', label: 'Un peu' },

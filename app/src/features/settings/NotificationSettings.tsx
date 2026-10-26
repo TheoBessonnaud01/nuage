@@ -31,10 +31,10 @@ export function NotificationSettings({ settings }: { settings: Settings }) {
   return (
     <Card className="space-y-3">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="font-extrabold">{t.notifTitle}</h2>
-        <span className={`text-sm font-bold ${on ? 'text-sauge-fort' : 'text-muted'}`}>{on ? t.notifOn : t.notifOff}</span>
+        <h2 className="font-display text-[19px] leading-tight font-semibold">{t.notifTitle}</h2>
+        <span className={`text-sm font-bold ${on ? 'text-c-accent' : 'text-c-muted'}`}>{on ? t.notifOn : t.notifOff}</span>
       </div>
-      <p className="text-muted text-[15px]">{t.notifHelp}</p>
+      <p className="text-c-muted text-[15px]">{t.notifHelp}</p>
       {t.notifStates[state] && <p className="font-bold">{t.notifStates[state]}</p>}
 
       {(state === 'off' || state === 'on') && (
@@ -53,7 +53,7 @@ export function NotificationSettings({ settings }: { settings: Settings }) {
         <span className="font-bold">{t.notifTime}</span>
         <input
           type="time" value={settings.reminderTime} onChange={(e) => setTime(e.target.value)}
-          className="mt-1 w-full min-h-touch rounded-xl border-2 border-line bg-surface px-3 text-[16px]"
+          className="field mt-1 w-full"
         />
       </label>
 
@@ -64,7 +64,7 @@ export function NotificationSettings({ settings }: { settings: Settings }) {
             <button
               key={d} type="button" aria-pressed={settings.silentDays.includes(d)} aria-label={t.weekdaysLong[d]}
               onClick={() => toggleDay(d)}
-              className={`min-h-touch rounded-xl border-2 font-bold ${settings.silentDays.includes(d) ? 'border-sauge-fort bg-sauge/30' : 'border-line'}`}
+              className={`press min-h-[44px] rounded-full font-bold ${settings.silentDays.includes(d) ? 'bg-c-primary text-c-on-primary' : 'bg-c-surface-2 text-c-ink'}`}
             >
               {t.weekdaysShort[d]}
             </button>
@@ -81,7 +81,7 @@ export function NotificationSettings({ settings }: { settings: Settings }) {
         </>
       )}
 
-      <Link to="/rappels" className="block font-bold underline text-sauge-fort min-h-touch pt-2">{t.notifFallback}</Link>
+      <Link to="/rappels" className="block font-bold underline text-c-accent min-h-touch pt-2">{t.notifFallback}</Link>
     </Card>
   );
 }

@@ -49,7 +49,7 @@ export function CrisisLogPage() {
       render: () => (
         <div className="space-y-4">
           <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder={t.notePlaceholder} rows={3}
-            className="w-full rounded-2xl border-2 border-line bg-surface p-4 text-[16px] outline-none focus:border-sauge-fort" />
+            className="field w-full" />
           <Link to="/crise/traitement" className="block"><Button variant="secondary" tabIndex={-1}>{t.tookMed}</Button></Link>
         </div>
       ),

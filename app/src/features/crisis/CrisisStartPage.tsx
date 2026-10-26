@@ -44,7 +44,7 @@ export function CrisisStartPage() {
           </div>
           {aura === 'oui' && (
             <div>
-              <h2 className="font-bold text-muted mb-2">{t.auraTypesTitle}</h2>
+              <h2 className="font-bold text-c-muted mb-2">{t.auraTypesTitle}</h2>
               <ChipList items={auraTypes} selected={auraKinds} onChange={setAuraKinds} />
             </div>
           )}

@@ -15,7 +15,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, { failed: 
         <button
           type="button"
           onClick={() => { location.hash = '#/'; location.reload(); }}
-          className="min-h-touch w-full rounded-2xl px-5 py-3 text-lg font-bold bg-sauge-fort text-surface"
+          className="min-h-touch w-full rounded-2xl px-5 py-3 text-lg font-bold bg-c-primary text-c-on-primary"
         >
           {copy.error.cta}
         </button>

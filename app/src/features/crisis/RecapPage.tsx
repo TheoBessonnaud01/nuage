@@ -35,34 +35,34 @@ export function RecapPage() {
     <main className="mx-auto max-w-md px-4 py-6 space-y-4">
       <PageHeader title={t.recapTitle} />
       {finished && <Pepite mood="fier" text={t.recapBody} size="sm" importantBubble />}
-      <p className="text-muted">
+      <p className="text-c-muted">
         {t.recapDates.replace('{debut}', dateFmt.format(new Date(attack.startAt))).replace('{fin}', attack.recoveredAt ? dateFmt.format(new Date(attack.recoveredAt)) : '…')}
       </p>
 
       <div className="grid grid-cols-2 gap-3">
         {stats.map(([k, v]) => (
           <Card key={k} className="!p-4">
-            <p className="text-sm font-bold text-muted">{k}</p>
-            <p className="text-2xl font-extrabold mt-1">{v}</p>
+            <p className="text-sm font-bold text-c-muted">{k}</p>
+            <p className="font-display text-[26px] leading-none font-semibold mt-2">{v}</p>
           </Card>
         ))}
       </div>
 
       <Card className="!p-4">
-        <p className="text-sm font-bold text-muted">{t.recapAura}</p>
+        <p className="text-sm font-bold text-c-muted">{t.recapAura}</p>
         <p className="text-[16px] mt-1">{aura}</p>
       </Card>
 
       <Card>
-        <h2 className="font-extrabold mb-2">{t.recapMeds}</h2>
-        {s.meds.length === 0 ? <p className="text-muted">{t.recapNoMeds}</p> : (
+        <h2 className="font-display text-[19px] leading-tight font-semibold mb-2">{t.recapMeds}</h2>
+        {s.meds.length === 0 ? <p className="text-c-muted">{t.recapNoMeds}</p> : (
           <ul className="space-y-2">
             {s.meds.map((m) => {
               const e = efficacyLevels.find((x) => x.value === m.efficacyAfter2h);
               return (
                 <li key={m.id}>
                   <span className="font-bold">{m.name}</span> · {time(m.takenAt)}
-                  <br /><span className="text-muted text-[15px]">{e ? t.recapEfficacy.replace('{e}', `${e.emoji} ${e.label.toLowerCase()}`) : t.recapEfficacyUnknown}</span>
+                  <br /><span className="text-c-muted text-[15px]">{e ? t.recapEfficacy.replace('{e}', e.label.toLowerCase()) : t.recapEfficacyUnknown}</span>
                 </li>
               );
             })}

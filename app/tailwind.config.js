@@ -7,17 +7,6 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: token('bg'),
-        surface: token('surface'),
-        ink: token('ink'),
-        muted: token('muted'),
-        line: token('line'),
-        sauge: token('sauge'),
-        'sauge-fort': token('sauge-fort'),
-        sable: token('sable'),
-        lavande: token('lavande'),
-        ciel: token('ciel'),
-        peche: token('peche'),
         // Système visuel v2
         'c-bg': token('c-bg'),
         'c-surface': token('c-surface'),
@@ -33,7 +22,7 @@ export default {
         'c-on-grad-muted': token('c-on-grad-muted'),
       },
       fontFamily: {
-        sans: ['"Nunito Variable"', 'system-ui', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans Variable"', 'system-ui', 'sans-serif'],
         text: ['"Plus Jakarta Sans Variable"', 'system-ui', 'sans-serif'],
         display: ['"Fraunces Variable"', 'Georgia', 'serif'],
       },

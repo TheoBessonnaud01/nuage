@@ -46,22 +46,22 @@ function ListEditor({ kind, settings }: { kind: ListKind; settings: Settings }) 
     setEditing(null);
   };
 
-  const small = 'min-h-touch min-w-touch rounded-lg border border-line text-sm font-bold px-2';
+  const small = 'min-h-touch min-w-touch rounded-2xl bg-c-surface shadow-soft text-sm font-bold px-2';
   return (
     <Card className="space-y-3">
-      <h2 className="font-extrabold">{t.kinds[kind]}</h2>
-      {kind === 'customFactors' && <p className="text-sm text-muted">{t.customFactorsHelp}</p>}
+      <h2 className="font-display text-[19px] leading-tight font-semibold">{t.kinds[kind]}</h2>
+      {kind === 'customFactors' && <p className="text-sm text-c-muted">{t.customFactorsHelp}</p>}
       <ul className="space-y-2">
         {items.map((i, idx) => (
-          <li key={i.id} className={`rounded-xl border p-2 ${i.hidden ? 'border-dashed border-muted/60 text-muted' : 'border-line'}`}>
+          <li key={i.id} className={`rounded-2xl p-2 ${i.hidden ? 'border-2 border-dashed border-c-ink/15 text-c-muted' : 'bg-c-surface-2'}`}>
             {editing === i.id ? (
               <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); rename(i.id); }}>
-                <input autoFocus value={draft} onChange={(e) => setDraft(e.target.value)} className="flex-1 min-h-touch rounded-lg border border-line bg-surface px-2 text-[16px]" aria-label={t.rename} />
+                <input autoFocus value={draft} onChange={(e) => setDraft(e.target.value)} className="field flex-1" aria-label={t.rename} />
                 <button type="submit" className={small}>{t.save}</button>
               </form>
             ) : (
               <div className="flex items-center gap-1">
-                <span className="flex-1 font-bold text-[15px]">{i.emoji} {i.label}{i.hidden && <span className="text-muted font-normal"> · {t.hidden}</span>}</span>
+                <span className="flex-1 font-bold text-[15px]">{i.label}{i.hidden && <span className="text-c-muted font-normal"> · {t.hidden}</span>}</span>
                 <button type="button" aria-label={`${t.up} ${i.label}`} onClick={() => move(idx, -1)} className={small}>↑</button>
                 <button type="button" aria-label={`${t.down} ${i.label}`} onClick={() => move(idx, 1)} className={small}>↓</button>
                 <button type="button" aria-label={`${t.rename} ${i.label}`} onClick={() => { setEditing(i.id); setDraft(i.label); }} className={small}>✏️</button>
@@ -74,8 +74,8 @@ function ListEditor({ kind, settings }: { kind: ListKind; settings: Settings }) 
         ))}
       </ul>
       <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); add(); }}>
-        <input value={text} onChange={(e) => setText(e.target.value)} placeholder={t.addPlaceholder} aria-label={t.addPlaceholder} className="flex-1 min-h-touch rounded-xl border border-line bg-surface px-3 text-[16px]" />
-        <button type="submit" className="min-h-touch px-4 rounded-xl bg-sauge-fort text-surface font-bold">{t.add}</button>
+        <input value={text} onChange={(e) => setText(e.target.value)} placeholder={t.addPlaceholder} aria-label={t.addPlaceholder} className="field flex-1" />
+        <button type="submit" className="min-h-touch px-4 rounded-2xl bg-c-primary text-c-on-primary font-bold">{t.add}</button>
       </form>
     </Card>
   );
@@ -87,7 +87,7 @@ export function ListsPage() {
   return (
     <main className="mx-auto max-w-md px-4 py-6 space-y-4">
       <PageHeader title={t.title} backTo="/reglages" />
-      <p className="text-muted">{t.intro}</p>
+      <p className="text-c-muted">{t.intro}</p>
       {kinds.map((k) => <ListEditor key={k} kind={k} settings={settings} />)}
     </main>
   );

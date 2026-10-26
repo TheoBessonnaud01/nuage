@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { HashRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { AppNav } from './components/AppNav';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { DesignPreview } from './features/design/DesignPreview';
 
 // Chargé à part (graphique Recharts) pour que l'app démarre plus vite ; reste disponible hors ligne.
 const MonthsPage = lazy(() => import('./features/monthly/MonthsPage').then((m) => ({ default: m.MonthsPage })));
@@ -48,7 +48,6 @@ export function App() {
       <ErrorBoundary>
       <Routes>
         <Route path="/bienvenue" element={<OnboardingPage />} />
-        <Route path="/design" element={<DesignPreview />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/checkin" element={<CheckinPage />} />
         <Route path="/checkin/:date" element={<CheckinPage />} />
@@ -80,6 +79,7 @@ export function App() {
         {import.meta.env.DEV && <Route path="/mascot-preview" element={<MascotPreview />} />}
         <Route path="*" element={<HomePage />} />
       </Routes>
+      <AppNav />
       </ErrorBoundary>
     </HashRouter>
   );
@@ -110,7 +110,7 @@ function OnboardingGate({ done }: { done: boolean | null }) {
   useEffect(() => {
     if (checked.current || done === null) return;
     checked.current = true;
-    if (!done && pathname !== '/bienvenue' && pathname !== '/mascot-preview' && pathname !== '/design') navigate('/bienvenue', { replace: true });
+    if (!done && pathname !== '/bienvenue' && pathname !== '/mascot-preview') navigate('/bienvenue', { replace: true });
   }, [done, pathname, navigate]);
   return null;
 }

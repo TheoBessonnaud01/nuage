@@ -31,14 +31,14 @@ export function PostdromePage() {
         <div>
           <p className="text-3xl font-extrabold text-center" aria-live="polite">{pct} %</p>
           <input type="range" min={0} max={100} step={10} value={pct} onChange={(e) => setPct(Number(e.target.value))}
-            aria-label={t.postPercent.replace('{n}', String(pct))} className="w-full accent-[rgb(var(--sauge-fort))] mt-4" />
+            aria-label={t.postPercent.replace('{n}', String(pct))} className="w-full accent-[rgb(var(--c-accent))] mt-4" />
         </div>
       ),
     },
     {
       key: 'note', title: t.noteTitle,
       render: () => <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder={t.notePlaceholder} rows={3}
-        className="w-full rounded-2xl border-2 border-line bg-surface p-4 text-[16px] outline-none focus:border-sauge-fort" />,
+        className="field w-full" />,
     },
   ];
 

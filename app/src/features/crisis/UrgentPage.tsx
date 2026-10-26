@@ -11,25 +11,25 @@ export function UrgentPage() {
       <PageHeader title={c.titre} backTo="/crise" />
       {c.corps.map((p) => <p key={p}>{p}</p>)}
 
-      <section className="rounded-card border-2 border-ink/40 p-5 space-y-3">
-        <h2 className="text-lg font-extrabold">{t.call15Title}</h2>
+      <section className="rounded-card border-2 border-c-ink/40 p-5 space-y-3">
+        <h2 className="font-display text-[19px] leading-tight font-semibold">{t.call15Title}</h2>
         <ul className="list-disc pl-5 space-y-2">{c.call15.map((x) => <li key={x}>{x}</li>)}</ul>
         <div className="grid grid-cols-2 gap-3 pt-2">
-          <a href="tel:15" className="min-h-touch rounded-2xl bg-ink text-bg font-extrabold grid place-items-center">{t.call15}</a>
-          <a href="tel:112" className="min-h-touch rounded-2xl border-2 border-ink font-extrabold grid place-items-center">{t.call112}</a>
+          <a href="tel:15" className="min-h-touch rounded-2xl bg-c-ink text-c-bg font-extrabold grid place-items-center">{t.call15}</a>
+          <a href="tel:112" className="min-h-touch rounded-2xl border-2 border-c-ink font-extrabold grid place-items-center">{t.call112}</a>
         </div>
       </section>
 
       <section className="space-y-2">
-        <h2 className="text-lg font-extrabold">{t.soonTitle}</h2>
+        <h2 className="font-display text-[19px] leading-tight font-semibold">{t.soonTitle}</h2>
         <ul className="list-disc pl-5 space-y-2">{c.soon.map((x) => <li key={x}>{x}</li>)}</ul>
       </section>
       <section className="space-y-2">
-        <h2 className="text-lg font-extrabold">{t.soonDaysTitle}</h2>
+        <h2 className="font-display text-[19px] leading-tight font-semibold">{t.soonDaysTitle}</h2>
         <ul className="list-disc pl-5 space-y-2">{c.soonDays.map((x) => <li key={x}>{x}</li>)}</ul>
       </section>
 
-      <p className="text-sm text-muted">
+      <p className="text-sm text-c-muted">
         {t.source} : <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline">{c.sourceLabel}</a>
         <br />{t.verified.replace('{date}', c.verifiedAt)}
       </p>

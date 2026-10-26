@@ -21,8 +21,8 @@ export function EndPainPage() {
     return (
       <main className="mx-auto max-w-md px-4 py-6 space-y-5">
         <Pepite mood="fatigue" lineContext="finDouleur" size="md" importantBubble />
-        <Card tone="bg-ciel/50">
-          <h1 className="text-2xl font-extrabold">{t.endDoneTitle}</h1>
+        <Card tone="grad-sky">
+          <h1 className="font-display text-[28px] leading-tight font-semibold">{t.endDoneTitle}</h1>
           <p className="mt-2">{t.endDoneBody}</p>
         </Card>
         <InfoSuggestion trigger="premiere-fin" />

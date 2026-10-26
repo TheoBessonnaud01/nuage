@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="32 8 136 136">
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="22 6 156 156">
   <mask id="m"><rect x="0" y="0" width="200" height="200" fill="white"/>
-    <ellipse cx="78" cy="80" rx="9" ry="11" fill="black"/><ellipse cx="122" cy="80" rx="9" ry="11" fill="black"/>
-    <path d="M93 96 Q100 92 107 96 Q104 103 100 104 Q96 103 93 96Z" fill="black"/></mask>
+    <ellipse cx="79" cy="84" rx="11" ry="13" fill="black"/><ellipse cx="121" cy="84" rx="11" ry="13" fill="black"/>
+    <path d="M92.5 97 Q100 92.5 107.5 97 Q105.5 104.5 100 106.5 Q94.5 104.5 92.5 97Z" fill="black"/></mask>
   <g fill="white" mask="url(#m)">
-    <path d="M52 62 C 44 38, 52 22, 66 24 C 76 26, 86 36, 90 44 Z"/>
-    <path d="M148 62 C 156 38, 148 22, 134 24 C 124 26, 114 36, 110 44 Z"/>
-    <ellipse cx="100" cy="84" rx="62" ry="52"/></g></svg>
+    <path d="M50 62 C 42 38, 48 19, 63 16 C 76 14, 87 27, 93 40 Z"/>
+    <path d="M150 62 C 158 38, 152 19, 137 16 C 124 14, 113 27, 107 40 Z"/>
+    <path d="M100 28 C 137 28, 165 51, 167 82 C 168 92, 166 99, 162 105 L 170 110 L 160 113 L 165 121 L 152 120 C 141 133, 122 139, 100 139 C 78 139, 59 133, 48 120 L 35 121 L 40 113 L 30 110 L 38 105 C 34 99, 32 92, 33 82 C 35 51, 63 28, 100 28 Z"/></g></svg>

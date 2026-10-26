@@ -2,7 +2,8 @@ import { useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { copy } from '../content/copy';
 import { ProgressBar } from './inputs';
-import { ActionBar, Button } from './ui';
+import { ActionBar, BackButton, Button } from './ui';
+import { Icon } from '../ui/Icon';
 
 export interface WizardStep {
   key: string;
@@ -25,17 +26,18 @@ export function Wizard({
 
   return (
     <main className="mx-auto max-w-md px-4 pt-4 !pb-0 screen-h flex flex-col">
-      <header className="flex items-center gap-2">
-        <button type="button" onClick={back} aria-label={copy.common.back} className="min-h-touch min-w-touch grid place-items-center rounded-full text-2xl">‹</button>
-        <div className="flex-1">
-          <p className="text-sm font-bold text-muted">{label}</p>
+      <header className="flex items-center gap-3">
+        <BackButton onClick={back} label={copy.common.back} />
+        <div className="flex-1 space-y-1.5">
+          <p className="text-[13px] font-bold text-c-muted">{label}</p>
           <ProgressBar value={(index + 1) / steps.length} label={`${index + 1} / ${steps.length}`} />
         </div>
+        <span className="text-[13px] font-bold text-c-muted tabular-nums">{index + 1}/{steps.length}</span>
       </header>
       {index === 0 && top}
       <section key={step.key} className="mt-4 pb-6 space-y-4" aria-live="polite">
-        <h1 className="text-2xl font-extrabold">{step.title}</h1>
-        {step.help && <p className="text-muted">{step.help}</p>}
+        <h1 className="font-display text-[28px] leading-tight font-semibold">{step.title}</h1>
+        {step.help && <p className="text-c-muted">{step.help}</p>}
         {step.render(next)}
       </section>
       <ActionBar className={last ? '' : 'grid grid-cols-2 gap-3'}>
@@ -44,7 +46,7 @@ export function Wizard({
         ) : (
           <>
             <Button variant="ghost" onClick={next}>{copy.common.skip}</Button>
-            <Button onClick={next}>{copy.common.next}</Button>
+            <Button onClick={next}>{copy.common.next}<Icon name="arrow-right" size={19} /></Button>
           </>
         )}
       </ActionBar>

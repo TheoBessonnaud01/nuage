@@ -15,7 +15,7 @@ function choiceLabel(field: keyof DayEntry, value: unknown): string {
   for (const s of checkinScreens) for (const p of s.parts) {
     if (p.field === field && (p.kind === 'choice' || p.kind === 'scale')) {
       const o = (p.options as { value: unknown; label: string; emoji?: string }[]).find((x) => x.value === value);
-      if (o) return [o.emoji, o.label].filter(Boolean).join(' ');
+      if (o) return o.label;
     }
   }
   return String(value);
@@ -71,7 +71,7 @@ export function DayPage() {
       <PageHeader title={formatDayLong(date)} backTo="/calendrier" />
 
       {(status.kind === 'crise' || status.kind === 'post-crise') && (
-        <Card tone={status.kind === 'crise' ? 'bg-lavande/50' : 'bg-ciel/60'}>
+        <Card tone={status.kind === 'crise' ? 'grad-lilac' : 'grad-sky'}>
           <p className="font-extrabold">{status.kind === 'crise' ? t.crisis : t.postCrisis}</p>
           {attack && (
             <Link to={attack.status === 'terminée' ? `/crise/recap/${attack.id}` : '/crise'} className="block mt-2 font-bold underline">
@@ -83,11 +83,11 @@ export function DayPage() {
 
       {entry ? (
         <Card>
-          {entry.filledLate && <p className="text-sm text-muted mb-3">{t.filledLate}</p>}
+          {entry.filledLate && <p className="text-sm text-c-muted mb-3">{t.filledLate}</p>}
           <dl className="space-y-3">
             {rows(entry).map(([k, v]) => (
               <div key={k}>
-                <dt className="text-sm font-bold text-muted">{k}</dt>
+                <dt className="text-sm font-bold text-c-muted">{k}</dt>
                 <dd className="text-[16px]">{v}</dd>
               </div>
             ))}
