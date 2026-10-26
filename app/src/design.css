@@ -1,0 +1,153 @@
+/* ==========================================================================
+   Nuage — système visuel v2
+   Deux directions de couleurs (data-direction="aube" | "lagon"), chacune en
+   clair / sombre (data-theme) + mode crise (data-crisis="on").
+   Les jetons sont des triplets RGB : utilisables avec l'opacité Tailwind (bg-c-surface/80).
+   Ils s'appliquent sur n'importe quel élément : une maquette peut avoir son propre thème.
+   ========================================================================== */
+
+:root, [data-direction='aube'] {
+  --c-bg: 251 247 244;
+  --c-surface: 255 255 255;
+  --c-surface-2: 246 239 235;
+  --c-ink: 33 27 46;
+  --c-muted: 104 96 117;
+  --c-line: 236 228 224;
+  --c-primary: 42 33 64;
+  --c-on-primary: 255 255 255;
+  --c-accent: 201 67 44;          /* liens et éléments actifs (contraste AA) */
+  --c-accent-soft: 255 214 200;
+  --c-on-grad: 33 27 46;          /* texte posé sur un dégradé */
+  --c-on-grad-muted: 72 62 92;
+  --c-glow-1: 255 196 160;        /* halos de fond */
+  --c-glow-2: 214 196 255;
+  --g-hero-1: 255 190 150; --g-hero-2: 255 150 180; --g-hero-3: 190 168 255;
+  --g-peach-1: 255 226 210; --g-peach-2: 255 186 160;
+  --g-lilac-1: 233 226 255; --g-lilac-2: 196 180 255;
+  --g-mint-1: 214 248 234; --g-mint-2: 150 232 204;
+  --g-sky-1: 220 240 255; --g-sky-2: 168 214 255;
+  --g-sun-1: 255 238 186; --g-sun-2: 255 205 120;
+  --g-night-1: 72 62 120; --g-night-2: 40 36 72;
+}
+
+[data-direction='lagon'] {
+  --c-bg: 243 248 251;
+  --c-surface: 255 255 255;
+  --c-surface-2: 232 242 247;
+  --c-ink: 16 42 58;
+  --c-muted: 82 106 121;
+  --c-line: 218 231 239;
+  --c-primary: 16 42 58;
+  --c-on-primary: 255 255 255;
+  --c-accent: 13 122 108;
+  --c-accent-soft: 190 240 226;
+  --c-on-grad: 16 42 58;
+  --c-on-grad-muted: 50 78 92;
+  --c-glow-1: 160 236 214;
+  --c-glow-2: 170 214 255;
+  --g-hero-1: 168 242 214; --g-hero-2: 130 214 240; --g-hero-3: 176 196 255;
+  --g-peach-1: 255 232 220; --g-peach-2: 255 196 176;
+  --g-lilac-1: 232 232 255; --g-lilac-2: 190 196 255;
+  --g-mint-1: 214 250 238; --g-mint-2: 140 230 200;
+  --g-sky-1: 222 242 255; --g-sky-2: 150 206 250;
+  --g-sun-1: 255 242 200; --g-sun-2: 255 214 140;
+  --g-night-1: 40 80 110; --g-night-2: 20 40 60;
+}
+
+/* ---------- Sombre ---------- */
+[data-theme='sombre'], [data-theme='sombre'] [data-direction='aube'] {
+  --c-bg: 21 18 30;
+  --c-surface: 32 28 44;
+  --c-surface-2: 42 37 57;
+  --c-ink: 245 241 250;
+  --c-muted: 184 176 198;
+  --c-line: 56 50 74;
+  --c-primary: 245 241 250;
+  --c-on-primary: 33 27 46;
+  --c-accent: 255 160 136;
+  --c-accent-soft: 90 50 50;
+  --c-on-grad: 248 244 252;
+  --c-on-grad-muted: 214 206 228;
+  --c-glow-1: 120 60 80;
+  --c-glow-2: 70 60 130;
+  --g-hero-1: 150 80 90; --g-hero-2: 120 60 110; --g-hero-3: 80 66 150;
+  --g-peach-1: 84 52 56; --g-peach-2: 70 44 60;
+  --g-lilac-1: 62 54 104; --g-lilac-2: 48 42 86;
+  --g-mint-1: 34 76 68; --g-mint-2: 28 60 60;
+  --g-sky-1: 34 60 90; --g-sky-2: 30 46 76;
+  --g-sun-1: 84 70 40; --g-sun-2: 66 54 36;
+}
+[data-theme='sombre'][data-direction='lagon'], [data-theme='sombre'] [data-direction='lagon'], [data-direction='lagon'][data-theme='sombre'] {
+  --c-bg: 12 24 32;
+  --c-surface: 20 36 46;
+  --c-surface-2: 28 48 60;
+  --c-ink: 236 246 250;
+  --c-muted: 168 192 204;
+  --c-line: 40 62 76;
+  --c-primary: 236 246 250;
+  --c-on-primary: 16 42 58;
+  --c-accent: 110 230 200;
+  --c-on-grad: 240 250 252;
+  --c-on-grad-muted: 196 220 228;
+  --c-glow-1: 20 90 80;
+  --c-glow-2: 30 70 120;
+  --g-hero-1: 24 100 90; --g-hero-2: 24 80 110; --g-hero-3: 50 60 120;
+}
+
+/* ---------- Mode crise : nuit douce, aucun éclat ---------- */
+[data-crisis='on'], .mode-crise {
+  --c-bg: 18 17 24;
+  --c-surface: 28 27 37;
+  --c-surface-2: 36 35 47;
+  --c-ink: 214 210 224;
+  --c-muted: 160 156 174;
+  --c-line: 48 46 60;
+  --c-primary: 196 186 236;
+  --c-on-primary: 24 22 36;
+  --c-accent: 196 186 236;
+  --c-on-grad: 222 218 232;
+  --c-on-grad-muted: 180 176 196;
+  --c-glow-1: 50 44 80;
+  --c-glow-2: 30 40 70;
+  --g-hero-1: 52 46 86; --g-hero-2: 40 38 70; --g-hero-3: 32 34 58;
+  --g-peach-1: 50 42 50; --g-peach-2: 42 36 46;
+  --g-lilac-1: 52 46 86; --g-lilac-2: 40 36 70;
+  --g-mint-1: 34 52 52; --g-mint-2: 28 44 46;
+  --g-sky-1: 34 46 66; --g-sky-2: 28 38 58;
+  --g-sun-1: 56 50 40; --g-sun-2: 46 42 36;
+}
+
+/* ---------- Dégradés de cartes ---------- */
+.grad-hero  { background: linear-gradient(135deg, rgb(var(--g-hero-1)) 0%, rgb(var(--g-hero-2)) 55%, rgb(var(--g-hero-3)) 100%); }
+.grad-peach { background: linear-gradient(140deg, rgb(var(--g-peach-1)), rgb(var(--g-peach-2))); }
+.grad-lilac { background: linear-gradient(140deg, rgb(var(--g-lilac-1)), rgb(var(--g-lilac-2))); }
+.grad-mint  { background: linear-gradient(140deg, rgb(var(--g-mint-1)), rgb(var(--g-mint-2))); }
+.grad-sky   { background: linear-gradient(140deg, rgb(var(--g-sky-1)), rgb(var(--g-sky-2))); }
+.grad-sun   { background: linear-gradient(140deg, rgb(var(--g-sun-1)), rgb(var(--g-sun-2))); }
+.grad-night { background: linear-gradient(160deg, rgb(var(--g-night-1)), rgb(var(--g-night-2))); }
+
+/* Fond de page : halos très doux (créent de la profondeur sans distraire) */
+.page-glow {
+  background-color: rgb(var(--c-bg));
+  background-image:
+    radial-gradient(60% 40% at 100% 0%, rgb(var(--c-glow-1) / .55), transparent 70%),
+    radial-gradient(50% 35% at 0% 30%, rgb(var(--c-glow-2) / .45), transparent 70%);
+  background-attachment: fixed;
+}
+
+/* Verre dépoli (barre de navigation, bulles) */
+.glass {
+  background: rgb(var(--c-surface) / .72);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  backdrop-filter: saturate(160%) blur(18px);
+}
+
+/* Ombres douces, colorées (pas de gris sale) */
+.shadow-soft { box-shadow: 0 1px 2px rgb(var(--c-ink) / .04), 0 8px 24px -8px rgb(var(--c-ink) / .12); }
+.shadow-float { box-shadow: 0 2px 6px rgb(var(--c-ink) / .06), 0 18px 40px -12px rgb(var(--c-ink) / .25); }
+
+/* Retour tactile (Android et iOS) */
+.press { transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease; }
+.press:active { transform: scale(.97); }
+
+.font-display { font-family: 'Fraunces Variable', Georgia, serif; font-variation-settings: 'SOFT' 100, 'WONK' 0; letter-spacing: -.01em; }

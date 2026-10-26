@@ -77,26 +77,22 @@ body {
 
 /* ---------- Pépite ---------- */
 .pp {
-  --pp-fur: #F2A766; --pp-cream: #FFF1DC; --pp-stripe: #7A4A2E; --pp-line: #5A3A2A;
-  --pp-cheek: #F4A6A0; --pp-inner-ear: #F6C1B5; --pp-eye: #3A2A22; --pp-nose: #C9706B;
-  --pp-mouth: #8A3B3B; --pp-tongue: #F08A8A; --pp-gold: #F5C66B; --pp-lavande: #C5BAE0;
-  --pp-ciel: #C4DEEE; --pp-sauge: #8FA98F; --pp-peche: #F4C4AA; --pp-brun: #B98B5E; --pp-white: #FFFFFF; --pp-zzz: #7A6A60;
+  /* Les couleurs par défaut sont dans les calques SVG (valeurs de secours des var(--pp-…)). */
   overflow: visible;
   user-select: none;
 }
-/* Thème sombre : un peu moins lumineux */
-[data-theme='sombre'] .pp {
-  --pp-fur: #DC9A60; --pp-cream: #EBDDC6; --pp-cheek: #D9918B; --pp-inner-ear: #DDAFA4;
-  --pp-gold: #DDB461; --pp-lavande: #A99FC6; --pp-ciel: #9DBACB; --pp-peche: #D9AB93; --pp-white: #F2F2EE;
-  --pp-zzz: #B8BCC0;
+/* Atténué : câlin et mode crise (douceur, pas de couleurs vives) */
+.pp.pp-muted, [data-crisis='on'] .pp, .mode-crise .pp {
+  --pp-fur-1: #F2D2B4; --pp-fur-2: #E2AE86; --pp-fur-3: #CC8C64; --pp-fur-4: #A86E4C;
+  --pp-cream-2: #F6ECE2; --pp-cream-3: #DCC8B6;
+  --pp-stripe-1: #7A5444; --pp-stripe-2: #573A2E;
+  --pp-cheek: #E3A3B0; --pp-ear-2: #E6AAB6; --pp-nose-2: #CF8496;
+  --pp-lav-1: #DCD6F2; --pp-lav-2: #9E93D0; --pp-peach-2: #E0A08A; --pp-gold-2: #E2B36A;
 }
-/* Atténué : câlin et mode crise */
-.pp.pp-muted, [data-crisis='on'] .pp {
-  --pp-fur: #DDB08E; --pp-cream: #F1E6D6; --pp-stripe: #7F6252; --pp-line: #5C4A40;
-  --pp-cheek: #D2A7A2; --pp-inner-ear: #D7B9B0; --pp-lavande: #A9A3BF; --pp-peche: #CFB2A3; --pp-gold: #CDB68A;
-}
-[data-theme='sombre'] .pp.pp-muted, [data-crisis='on'] .pp {
-  --pp-fur: #A8866C; --pp-cream: #C9BEB0; --pp-line: #3E322C; --pp-lavande: #857F9C; --pp-peche: #A98F82; --pp-white: #D8D6D0;
+[data-crisis='on'] .pp, .mode-crise .pp {
+  --pp-fur-1: #CDB09A; --pp-fur-2: #B48C70; --pp-fur-3: #9C755A; --pp-fur-4: #7E5C46;
+  --pp-cream-1: #E9E2DA; --pp-cream-2: #D8CEC3; --pp-cream-3: #B9AA9B;
+  --pp-lav-1: #A9A2C8; --pp-lav-2: #6E6698; --pp-shadow: #000000;
 }
 .pp-breathe { transform-box: fill-box; transform-origin: 50% 100%; }
 .pp-animated .pp-breathe { animation: pp-breathe 3.6s ease-in-out infinite; }
